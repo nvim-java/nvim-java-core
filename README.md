@@ -1,47 +1,40 @@
-# A Neovim Plugin Template
+# :construction: nvim-java (WIP)
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/ellisonleao/nvim-plugin-template/lint-test.yml?branch=main&style=for-the-badge)
-![Lua](https://img.shields.io/badge/Made%20with%20Lua-blueviolet.svg?style=for-the-badge&logo=lua)
+No need to put up with [jdtls](https://github.com/eclipse-jdtls/eclipse.jdt.ls) nonsense anymore.
+Just install and start writing `public static void main(String[] args)`.
 
-A template repository for Neovim plugins.
+## Features
 
-## Using it
+:white_check_mark: are supported features. :x: are pending features.
 
-Via `gh`:
+- :white_check_mark: Diagnostics & Auto Completion
+- :x: Automatic [DAP](https://github.com/mfussenegger/nvim-dap) debug configuration
+- :x: Running tests
 
-```
-$ gh repo create my-plugin -p ellisonleao/nvim-plugin-template
-```
+## Why
 
-Via github web page:
+- Uses [nvim-lspconfig]() to setup `jdtls`
+- Uses `jdtls` and auto loads `jdtls` plugins from [mason.nvim](https://github.com/williamboman/mason.nvim) (If they are installed)
+  - Supported plugins are,
+    - `lombok` (mason `jdtls` package contains the lombok jar. So no need to installed it separately)
+    - `java-test`
+    - `java-debug-adapter`
+- Typed & documented APIs
+- No callback hells I [promise](https://github.com/pyericz/promise-lua)
 
-Click on `Use this template`
+## How to Use
 
-![](https://docs.github.com/assets/cb-36544/images/help/repository/use-this-template-button.png)
+```lua
+local java = require('java')
 
-## Features and structure
+require('lspconfig').jdtls.setup(java.get_config())
 
-- 100% Lua
-- Github actions for:
-  - running tests using [plenary.nvim](https://github.com/nvim-lua/plenary.nvim) and [busted](https://olivinelabs.com/busted/)
-  - check for formatting errors (Stylua)
-  - vimdocs autogeneration from README.md file
-  - luarocks release (LUAROCKS_API_KEY secret configuration required)
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+		local buffer = args.buf
 
-### Plugin structure
-
-```
-.
-├── lua
-│   ├── plugin_name
-│   │   └── module.lua
-│   └── plugin_name.lua
-├── Makefile
-├── plugin
-│   └── plugin_name.lua
-├── README.md
-├── tests
-│   ├── minimal_init.lua
-│   └── plugin_name
-│       └── plugin_name_spec.lua
+		-- add your language server keymaps here
+	end,
+	group = vim.api.nvim_create_augroup('LSP Keymaps', {}),
+})
 ```
