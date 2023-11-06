@@ -12,6 +12,17 @@
 ---@field on_attach fun(client: object, bufnr: number) Callback invoked by Nvim's built-in client when attaching a buffer to a language server. Often used to set Nvim (buffer or global) options or to override the Nvim client properties (`server_capabilities`) after a language server attaches. Most commonly used for settings buffer local keybindings. See |lspconfig-keybindings| for a usage example.
 ---@field settings table <string, string|table|boolean> The `settings` table is sent in `on_init` via a `workspace/didChangeConfiguration` notification from the Nvim client to the language server. These settings allow a user to change optional runtime settings of the language server.
 
+---@class LSPClientRequestParameters
+---@field command string
+---@field arguments string | string[] | nil
+
+---@class LSPClientResponse
+---@field err LSPClientResponseError
+
+---@class LSPClientResponseError
+---@field code number
+---@field message string
+
 ---@class LSPClient
 ---@field attached_buffers table<number, boolean>
 ---@field cancel_request function
@@ -25,7 +36,7 @@
 ---@field name string
 ---@field notify fun(method: string, params: object): boolean
 ---@field offset_encoding string
----@field request function
+---@field request fun(method: string, params: LSPClientRequestParameters, callback: fun(err: any, result: any), bufnr?: number): any
 ---@field request_sync function
 ---@field requests object
 ---@field rpc object

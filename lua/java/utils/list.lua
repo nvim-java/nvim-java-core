@@ -1,4 +1,4 @@
----@class List<T>: { [integer]: T }
+---@class List
 local M = {}
 
 function M:new(o)
@@ -9,17 +9,14 @@ function M:new(o)
 end
 
 ---Appends a value into to the list
----@generic T
----@param value T
+---@param value any
 function M:push(value)
 	table.insert(self, value)
 end
 
 ---Finds the matching value in a list
----@generic T
----@generic ListItem: any
----@param finder function
----@return T | nil
+---@param finder fun(value: any): boolean
+---@return any
 function M:find(finder)
 	for _, value in ipairs(self) do
 		if finder(value) then
@@ -28,6 +25,19 @@ function M:find(finder)
 	end
 
 	return nil
+end
+
+---Returns a list of mapped values
+---@param mapper fun(value: any): any
+---@return List
+function M:map(mapper)
+	local mapped_list = M:new()
+
+	for _, value in ipairs(self) do
+		mapped_list:push(mapper(value))
+	end
+
+	return mapped_list
 end
 
 return M

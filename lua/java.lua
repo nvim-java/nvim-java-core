@@ -1,6 +1,6 @@
 local server = require('java.server')
 local config = require('java.config')
-local settings = require('java.settings')
+local lsp = require('java.utils.lsp')
 
 ---@class Java
 ---@field config JavaConfig
@@ -22,7 +22,7 @@ function M.get_config(root_markers)
 end
 
 M.__run = function()
-	settings.change_settings({})
+	print('>>>>>')
 end
 
 return M

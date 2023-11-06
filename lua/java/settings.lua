@@ -13,8 +13,6 @@ function M.change_settings(settings)
 
 	local client = lsp.get_jdtls_client()
 
-	vim.print(client)
-
 	if not client then
 		local msg = 'jdtls client not found'
 		log.error(msg)
