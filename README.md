@@ -32,6 +32,10 @@ Just install and start writing `public static void main(String[] args)`.
 
 ```lua
 local java = require('java')
+local dap = require("java.dap")
+
+-- update dap config on attach event
+dap.setup_dap_on_attach()
 
 require('lspconfig').jdtls.setup(java.get_config())
 
