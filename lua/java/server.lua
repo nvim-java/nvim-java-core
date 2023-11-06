@@ -9,6 +9,16 @@ local workspace = require('java.workspace')
 
 local M = {}
 
+---@class JDTLSPluginPathRecord
+---@field name string
+---@field path string
+
+---@alias JDTLSPluginPaths JDTLSPluginPathRecord[]
+M.plugins = {
+	{ name = 'java-test', path = '/server/*.jar' },
+	{ name = 'java-debug-adapter', path = '/extension/server/*.jar' },
+}
+
 ---Returns a configuration for jdtls that you can pass into the setup of nvim-lspconfig
 --
 ---@class JavaGetConfigOptions
@@ -22,7 +32,7 @@ function M.get_config(opts)
 
 	local jdtls_path = mason.get_pkg_path('jdtls')
 	local curr_os = system.get_os()
-	local plugins = plugin.get_plugins({ 'java-test', 'java-debug-adapter' })
+	local plugins = plugin.get_plugins(M.plugins)
 	local lombok_path = jdtls_path .. '/lombok.jar'
 
 	local cmd = {
