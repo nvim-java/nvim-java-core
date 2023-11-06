@@ -14,7 +14,7 @@ Just install and start writing `public static void main(String[] args)`.
 :white_check_mark: are supported features. :x: are pending features.
 
 - :white_check_mark: Diagnostics & Auto Completion
-- :x: Automatic [DAP](https://github.com/mfussenegger/nvim-dap) debug configuration
+- :white_check_mark: Automatic [DAP](https://github.com/mfussenegger/nvim-dap) debug configuration
 - :x: Running tests
 
 ## Why
