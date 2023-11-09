@@ -15,8 +15,8 @@ local M = {}
 
 ---@alias JDTLSPluginPaths JDTLSPluginPathRecord[]
 M.plugins = {
-	{ name = 'java-test', path = '/server/*.jar' },
-	{ name = 'java-debug-adapter', path = '/extension/server/*.jar' },
+	{ name = 'java-test', path = '/*.jar' },
+	{ name = 'java-debug-adapter', path = '/*.jar' },
 }
 
 ---Returns a configuration for jdtls that you can pass into the setup of nvim-lspconfig

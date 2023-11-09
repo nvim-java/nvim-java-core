@@ -13,7 +13,7 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
-local temp_path = '/tmp/nvim-java-test-plugins'
+local temp_path = './.test_plugins'
 
 require('lazy').setup({
 	{
@@ -22,6 +22,10 @@ require('lazy').setup({
 	},
 	{
 		'nvim-lua/plenary.nvim',
+		lazy = false,
+	},
+	{
+		'williamboman/mason.nvim',
 		lazy = false,
 	},
 }, {

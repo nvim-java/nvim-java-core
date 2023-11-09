@@ -13,7 +13,7 @@ function M.get_plugin_jars(pkg_name, path_to_jars)
 		return {}
 	end
 
-	local path = mason.get_pkg_path(pkg_name)
+	local path = mason.get_shared_path(pkg_name)
 
 	log.fmt_info('looking for %s plugin files at %s', pkg_name, path)
 
