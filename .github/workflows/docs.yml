@@ -19,7 +19,7 @@ jobs:
       - name: panvimdoc
         uses: kdheepak/panvimdoc@main
         with:
-          vimdoc: "nvim-java-core"
+          vimdoc: ""
           version: "Neovim >= 0.9.4"
           demojify: true
           treesitter: true
