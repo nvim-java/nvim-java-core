@@ -24,9 +24,9 @@ jobs:
           version: "Neovim >= 0.9.4"
           demojify: true
           treesitter: true
-          shiftheadinglevelby: 0
+          shiftheadinglevelby: 1
           docmappingprojectname: false
-          incrementheadinglevelby: 1
+          incrementheadinglevelby: 0
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
