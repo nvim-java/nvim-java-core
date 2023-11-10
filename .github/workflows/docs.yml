@@ -8,7 +8,8 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
       - name: panvimdoc
         uses: kdheepak/panvimdoc@main
         with:
@@ -19,5 +20,3 @@ jobs:
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
-        with:
-          commit-message: "chore(doc): auto-generate vimdoc"
