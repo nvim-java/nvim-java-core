@@ -19,10 +19,11 @@ jobs:
       - name: panvimdoc
         uses: kdheepak/panvimdoc@main
         with:
+          vimdoc: "nvim-java-core"
           version: "Neovim >= 0.9.4"
           demojify: true
           treesitter: true
-          shiftheadinglevelby: 0
+          shiftheadinglevelby: 1
           incrementheadinglevelby: 1
 
       - name: Create Pull Request
