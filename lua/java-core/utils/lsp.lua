@@ -1,5 +1,5 @@
-local log = require('java.utils.log')
-local List = require('java.utils.list')
+local log = require('java-core.utils.log')
+local List = require('java-core.utils.list')
 
 local M = {}
 

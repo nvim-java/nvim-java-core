@@ -1,6 +1,6 @@
-local server = require('java.server')
-local config = require('java.config')
-local lsp = require('java.utils.lsp')
+local server = require('java-core.server')
+local config = require('java-core.config')
+local lsp = require('java-core.utils.lsp')
 
 ---@class Java
 ---@field config JavaConfig

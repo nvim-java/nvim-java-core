@@ -1,6 +1,6 @@
-local List = require('java.utils.list')
-local Set = require('java.utils.set')
-local JavaTestClient = require('java.ls.clients.java-test-client')
+local List = require('java-core.utils.list')
+local Set = require('java-core.utils.set')
+local JavaTestClient = require('java-core.ls.clients.java-test-client')
 
 local M = {}
 

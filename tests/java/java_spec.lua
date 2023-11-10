@@ -1,4 +1,4 @@
-local java = require('java')
+local java = require('java-core')
 
 describe('setup', function()
 	it('get_config API is available', function()

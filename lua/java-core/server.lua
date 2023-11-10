@@ -1,11 +1,11 @@
 local util = require('lspconfig.util')
-local system = require('java.utils.system')
-local file = require('java.utils.file')
-local mason = require('java.utils.mason')
-local plugin = require('java.utils.plugin')
-local log = require('java.utils.log')
-local tbl = require('java.utils.table')
-local workspace = require('java.workspace')
+local system = require('java-core.utils.system')
+local file = require('java-core.utils.file')
+local mason = require('java-core.utils.mason')
+local plugin = require('java-core.utils.plugin')
+local log = require('java-core.utils.log')
+local tbl = require('java-core.utils.table')
+local workspace = require('java-core.workspace')
 
 local M = {}
 
