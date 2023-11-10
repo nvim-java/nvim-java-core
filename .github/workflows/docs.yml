@@ -26,7 +26,7 @@ jobs:
           treesitter: true
           shiftheadinglevelby: 0
           docmappingprojectname: false
-          incrementheadinglevelby: 0
+          incrementheadinglevelby: 1
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
