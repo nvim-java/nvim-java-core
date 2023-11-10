@@ -2,22 +2,28 @@ on:
   push:
     branches:
       - main
+
 name: docs
+
+permissions:
+  pull-requests: write
+  contents: write
 
 jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
       - name: panvimdoc
         uses: kdheepak/panvimdoc@main
         with:
-          vimdoc: my-template-docs
-          version: "Neovim >= 0.8.0"
+          vimdoc: "nvim-java-core"
+          dedupsubheadings: false
+          version: "Neovim >= 0.9.4"
           demojify: true
-          treesitter: true
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
         with:
-          commit-message: "chore(doc): auto-generate vimdoc"
+          base: "main"
