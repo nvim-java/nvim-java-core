@@ -24,7 +24,7 @@ jobs:
           version: "Neovim >= 0.9.4"
           demojify: true
           treesitter: true
-          shiftheadinglevelby: 1
+          shiftheadinglevelby: 0
           docmappingprojectname: false
           incrementheadinglevelby: 0
 
