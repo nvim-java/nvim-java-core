@@ -21,7 +21,7 @@ jobs:
         with:
           vimdoc: ${VIMDOC_PROJECT_NAME}
           version: "Neovim >= 0.9.4"
-          demojify: false
+          demojify: true
           treesitter: true
 
       - name: Create Pull Request
