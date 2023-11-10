@@ -16,10 +16,8 @@ jobs:
           version: "Neovim >= 0.8.0"
           demojify: true
           treesitter: true
-      - name: Push changes
-        uses: stefanzweifel/git-auto-commit-action@v4
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
         with:
-          commit_message: "auto-generate vimdoc"
-          commit_user_name: "github-actions[bot]"
-          commit_user_email: "github-actions[bot]@users.noreply.github.com"
-          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+          commit-message: "chore(doc): auto-generate vimdoc"
