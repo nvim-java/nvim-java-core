@@ -23,7 +23,7 @@ jobs:
           version: "Neovim >= 0.9.4"
           demojify: true
           treesitter: true
-          shiftheadinglevelby: 0
+          shiftheadinglevelby: 1
           incrementheadinglevelby: 2
 
       - name: Create Pull Request
