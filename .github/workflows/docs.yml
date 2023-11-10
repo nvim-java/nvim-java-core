@@ -20,6 +20,7 @@ jobs:
         uses: kdheepak/panvimdoc@main
         with:
           vimdoc: ""
+          dedupsubheadings: false
           version: "Neovim >= 0.9.4"
           demojify: true
           treesitter: true
