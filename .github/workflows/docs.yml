@@ -6,6 +6,10 @@ on:
 
 name: docs
 
+permissions:
+  pull-requests: write
+  contents: write
+
 jobs:
   docs:
     runs-on: ubuntu-latest
