@@ -20,9 +20,10 @@ jobs:
         uses: kdheepak/panvimdoc@main
         with:
           version: "Neovim >= 0.9.4"
-          shiftheadinglevelby: 1
           demojify: true
           treesitter: true
+          shiftheadinglevelby: 0
+          incrementheadinglevelby: 1
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
