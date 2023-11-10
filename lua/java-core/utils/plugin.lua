@@ -1,6 +1,6 @@
-local log = require('java.utils.log')
-local file = require('java.utils.file')
-local mason = require('java.utils.mason')
+local log = require('java-core.utils.log')
+local file = require('java-core.utils.file')
+local mason = require('java-core.utils.mason')
 
 local M = {}
 

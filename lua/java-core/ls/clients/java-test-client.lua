@@ -1,5 +1,5 @@
-local log = require('java.utils.log')
-local JDTLSClient = require('java.ls.clients.jdtls-client')
+local log = require('java-core.utils.log')
+local JDTLSClient = require('java-core.ls.clients.jdtls-client')
 
 ---@class JavaTestDetails: Configuration
 ---@field fullName string

@@ -1,5 +1,5 @@
-local lsp = require('java.utils.lsp')
-local log = require('java.utils.log')
+local lsp = require('java-core.utils.lsp')
+local log = require('java-core.utils.log')
 
 local M = {}
 

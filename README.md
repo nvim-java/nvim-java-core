@@ -31,7 +31,7 @@ Just install and start writing `public static void main(String[] args)`.
 ## How to Use
 
 ```lua
-local java = require('java')
+local java = require('java-core')
 local dap = require("java.dap")
 
 -- update dap config on attach event

@@ -1,7 +1,7 @@
-local log = require('java.utils.log')
-local lsp = require('java.utils.lsp')
-local JavaDebug = require('java.ls.clients.java-debug-client')
-local Promise = require('java.utils.promise')
+local log = require('java-core.utils.log')
+local lsp = require('java-core.utils.lsp')
+local JavaDebug = require('java-core.ls.clients.java-debug-client')
+local Promise = require('java-core.utils.promise')
 
 local M = {}
 

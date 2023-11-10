@@ -1,10 +1,10 @@
-local log = require('java.utils.log')
-local java_test_adapter = require('java.ls.adapters.test-adapter')
+local log = require('java-core.utils.log')
+local java_test_adapter = require('java-core.ls.adapters.test-adapter')
 
-local List = require('java.utils.list')
-local Promise = require('java.utils.promise')
-local JavaTestClient = require('java.ls.clients.java-test-client')
-local JavaDebugClient = require('java.ls.clients.java-debug-client')
+local List = require('java-core.utils.list')
+local Promise = require('java-core.utils.promise')
+local JavaTestClient = require('java-core.ls.clients.java-test-client')
+local JavaDebugClient = require('java-core.ls.clients.java-debug-client')
 
 ---@class JavaTestHelper
 ---@field client JDTLSClient

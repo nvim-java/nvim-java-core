@@ -1,5 +1,5 @@
-local log = require('java.utils.log')
-local Promise = require('java.utils.promise')
+local log = require('java-core.utils.log')
+local Promise = require('java-core.utils.promise')
 
 ---@class JDTLSClient
 ---@field client LSPClient
