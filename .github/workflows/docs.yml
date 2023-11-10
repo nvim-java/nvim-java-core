@@ -25,7 +25,7 @@ jobs:
           demojify: true
           treesitter: true
           shiftheadinglevelby: 0
-          docmappingprojectname: false
+          docmappingprojectname: true
           incrementheadinglevelby: 2
 
       - name: Create Pull Request
