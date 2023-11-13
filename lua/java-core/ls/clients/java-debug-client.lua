@@ -1,6 +1,6 @@
 local JDTLSClient = require('java-core.ls.clients.jdtls-client')
 
----@class JavaDebugClient: JDTLSClient
+---@class JavaCoreDebugClient: JavaCoreJdtlsClient
 local M = JDTLSClient:new()
 
 ---@class JavaDebugResolveMainClassRecord

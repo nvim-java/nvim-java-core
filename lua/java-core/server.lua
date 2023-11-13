@@ -76,6 +76,7 @@ function M.get_config(opts)
 end
 
 ---Returns a function that finds the java project root
+---@private
 ---@param root_markers string[] list of files to find the root dir of a project
 ---@return function
 function M.get_root_finder(root_markers)

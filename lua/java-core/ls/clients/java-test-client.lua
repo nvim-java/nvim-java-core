@@ -29,7 +29,7 @@ local JDTLSClient = require('java-core.ls.clients.jdtls-client')
 ---@field line integer
 ---@field character integer
 
----@class JavaTestClient: JDTLSClient
+---@class JavaCoreTestClient: JavaCoreJdtlsClient
 local M = JDTLSClient:new()
 
 ---@alias JavaTestFindJavaProjectsResponse JavaTestDetails[]

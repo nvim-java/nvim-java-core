@@ -1,56 +1,29 @@
 local log = require('java-core.utils.log')
-local lsp = require('java-core.utils.lsp')
+local adapters = require('java-core.ls.adapters.test-adapter')
+local List = require('java-core.utils.list')
 local JavaDebug = require('java-core.ls.clients.java-debug-client')
 local Promise = require('java-core.utils.promise')
 
+---@class JavaCoreDap
+---@field client LSPClient
+---@field java_debug JavaCoreDebugClient
 local M = {}
 
-function M.setup_dap_on_attach()
-	vim.api.nvim_create_autocmd('LspAttach', {
-		pattern = '*',
-		callback = function(a)
-			local client = vim.lsp.get_client_by_id(a.data.client_id)
+---Returns a new dap instance
+---@param args { client: LSPClient }
+---@return JavaCoreDap
+function M:new(args)
+	local o = {
+		client = args.client,
+	}
 
-			if client.name == 'jdtls' then
-				Promise.all({
-					M.set_dap_config(),
-					M.set_dap_adapter(),
-				}):catch(function(err)
-					local msg = [[Faild to set DAP configuration & adapter]]
-
-					error(msg, err)
-					log.error(msg, err)
-				end)
-			end
-		end,
+	o.java_debug = JavaDebug:new({
+		client = args.client,
 	})
-end
 
-function M.set_dap_config()
-	log.info('setting dap configurations for java')
-
-	local dap = require('dap')
-
-	return M.get_dap_config():thenCall(
-		---@type JavaDapConfigurationList
-		function(res)
-			dap.configurations.java = res
-		end
-	)
-end
-
-function M.set_dap_adapter()
-	log.info('setting dap adapter for java')
-
-	local dap = require('dap')
-
-	return M.get_dap_adapter():thenCall(
-		---@type JavaDapAdapter
-		function(res)
-			log.debug('adapter settings: ', res)
-			dap.adapters.java = res
-		end
-	)
+	setmetatable(o, self)
+	self.__index = self
+	return o
 end
 
 ---@class JavaDapAdapter
@@ -60,25 +33,10 @@ end
 
 ---Returns the dap adapter config
 ---@return Promise
-function M.get_dap_adapter()
+function M:get_dap_adapter()
 	log.info('creating dap adapter for java')
 
-	local client = lsp.get_jdtls_client()
-
-	--@TODO when thrown from the function instead of the promise,
-	--error handling has to be done in two places
-	if not client then
-		local msg = 'no active jdtls client was found'
-
-		log.error(msg)
-		error(msg)
-	end
-
-	local jdtlsClient = JavaDebug:new({
-		client = client,
-	})
-
-	return jdtlsClient:start_debug_session():thenCall(
+	return self.java_debug:start_debug_session():thenCall(
 		---@param port JavaDebugStartDebugSessionResponse
 		function(port)
 			return {
@@ -90,106 +48,92 @@ function M.get_dap_adapter()
 	)
 end
 
----@class JavaDapConfiguration
----@field name string
----@field projectName string
----@field mainClass string
----@field javaExec string
----@field modulePaths string[]
----@field classPaths string[]
----@field request string
-
 ---@alias JavaDapConfigurationList JavaDapConfiguration[]
 
 ---Returns the dap configuration for the current project
 ---@return Promise
-function M.get_dap_config()
+function M:get_dap_config()
 	log.info('creating dap configuration for java')
 
-	local client = lsp.get_jdtls_client()
+	return self.java_debug:resolve_main_class():thenCall(
+		---@param mains JavaDebugResolveMainClassResponse
+		function(mains)
+			local config_promises = List:new(mains):map(function(main)
+				return self:get_dap_config_record(main)
+			end)
 
-	if not client then
-		local msg = 'no active jdtls client was found'
-
-		log.error(msg)
-		error(msg)
-	end
-
-	local jdtlsClient = JavaDebug:new({
-		client = client,
-	})
-
-	---@type JavaDebugResolveMainClassResponse
-	local main_classes_info_list
-
-	return jdtlsClient
-		:resolve_main_class()
-		:thenCall(
-			---@param main_classes_info JavaDebugResolveMainClassResponse
-			function(main_classes_info)
-				main_classes_info_list = main_classes_info
-
-				---@type Promise[]
-				local classpath_promises = {}
-				---@type Promise[]
-				local java_exec_promises = {}
-
-				for _, single_class_info in ipairs(main_classes_info) do
-					table.insert(
-						classpath_promises,
-						jdtlsClient:resolve_classpath(
-							single_class_info.mainClass,
-							single_class_info.projectName
-						)
-					)
-
-					table.insert(
-						java_exec_promises,
-						jdtlsClient:resolve_java_executable(
-							single_class_info.mainClass,
-							single_class_info.projectName
-						)
-					)
-				end
-
-				return Promise.all({
-					Promise.all(classpath_promises),
-					Promise.all(java_exec_promises),
-				})
-			end
-		)
-		:thenCall(function(result)
-			return M.__get_dap_java_config(
-				main_classes_info_list,
-				result[1],
-				result[2]
-			)
-		end)
+			return Promise.all(config_promises)
+		end
+	)
 end
 
-function M.__get_dap_java_config(main_classes, classpaths, java_execs)
-	local len = #main_classes
-	local dap_config_list = {}
+---Returns the dap config for the given main class
+---@param main JavaDebugResolveMainClassRecord
+---@return Promise
+function M:get_dap_config_record(main)
+	return Promise.all({
+		self.java_debug:resolve_classpath(main.mainClass, main.projectName),
+		self.java_debug:resolve_java_executable(main.mainClass, main.projectName),
+	}):thenCall(function(res)
+		---@type JavaDebugResolveClasspathResponse
+		local classpaths = res[1]
 
-	for i = 1, len do
-		local main_class = main_classes[i].mainClass
-		local project_name = main_classes[i].projectName
-		local module_paths = classpaths[i][1]
-		local class_paths = classpaths[i][2]
+		---@type JavaDebugResolveJavaExecutableResponse
+		local java_exec = res[2]
 
-		table.insert(dap_config_list, {
-			name = string.format('%s -> %s', project_name, main_class),
-			projectName = project_name,
-			mainClass = main_class,
-			javaExec = java_execs[i],
-			request = 'launch',
-			type = 'java',
-			modulePaths = module_paths,
-			classPaths = class_paths,
-		})
+		return adapters.get_dap_config(main, classpaths, java_exec)
+	end)
+end
+
+---Dap run with given config
+---@param config JavaDapConfiguration
+function M.dap_run(config)
+	log.info('running dap with config: ', config)
+
+	local function get_stream_reader(conn)
+		return vim.schedule_wrap(function(err, buffer)
+			assert(not err, err)
+
+			if buffer then
+				vim.print(buffer)
+			else
+				conn:close()
+			end
+		end)
 	end
 
-	return dap_config_list
+	---@type uv_tcp_t
+	local server
+
+	require('dap').run(config, {
+		before = function(conf)
+			log.debug('running before dap callback')
+
+			server = assert(vim.loop.new_tcp(), 'uv.new_tcp() must return handle')
+			server:bind('127.0.0.1', 0)
+			server:listen(128, function(err)
+				assert(not err, err)
+
+				local sock = assert(vim.loop.new_tcp(), 'uv.new_tcp must return handle')
+				server:accept(sock)
+				sock:read_start(get_stream_reader(sock))
+			end)
+
+			conf.args =
+				conf.args:gsub('-port ([0-9]+)', '-port ' .. server:getsockname().port)
+
+			return conf
+		end,
+
+		after = function()
+			vim.debug('running after dap callback')
+
+			if server then
+				server:shutdown()
+				server:close()
+			end
+		end,
+	})
 end
 
 return M

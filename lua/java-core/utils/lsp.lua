@@ -21,6 +21,7 @@ function M.get_jdtls_client()
 
 	if not client then
 		local msg = 'No active jdtls client found'
+
 		log.error(msg)
 		error(msg)
 	end

@@ -13,7 +13,7 @@
 -- User configuration section
 local default_config = {
 	-- Name of the plugin. Prepended to log messages
-	plugin = 'nvim-java',
+	plugin = 'nvim-java-core',
 
 	-- Should print the output to neovim while running
 	use_console = true,
