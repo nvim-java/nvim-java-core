@@ -5,16 +5,17 @@ local List = require('java-core.utils.list')
 local Promise = require('java-core.utils.promise')
 local JavaTestClient = require('java-core.ls.clients.java-test-client')
 local JavaDebugClient = require('java-core.ls.clients.java-debug-client')
+local JavaDap = require('java-core.dap')
 
----@class JavaTestHelper
----@field client JDTLSClient
----@field debug_client JavaDebugClient
----@field test_client JavaTestClient
+---@class JavaCoreTestHelper
+---@field client JavaCoreJdtlsClient
+---@field debug_client JavaCoreDebugClient
+---@field test_client JavaCoreTestClient
 local M = {}
 
 ---Returns a new test helper client
 ---@param args { client: LSPClient }
----@return JavaTestHelper
+---@return JavaCoreTestHelper
 function M:new(args)
 	local o = {
 		client = args.client,
@@ -29,19 +30,6 @@ function M:new(args)
 	setmetatable(o, self)
 	self.__index = self
 	return o
-end
-
-function M:run_current_test_class()
-	local buffer = vim.api.nvim_get_current_buf()
-	local uri = vim.uri_from_bufnr(buffer)
-
-	log.info('running current class at: ', uri)
-
-	return self.test_client
-		:find_test_types_and_methods(uri)
-		:thenCall(function(test_classes)
-			return self:run_test(test_classes[1])
-		end)
 end
 
 --@TODO all_tests are not running
@@ -86,6 +74,31 @@ function M:__run_all()
 		)
 end
 
+---Returns test classes in the given buffer
+---@param buffer integer
+---@return Promise
+function M:get_test_class_by_buffer(buffer)
+	log.info('finding test class by buffer')
+
+	return Promise.resolve()
+		:thenCall(function()
+			if not vim.api.nvim_buf_is_valid(buffer) then
+				local msg = ('passed buffer %s is not valid'):format(buffer)
+
+				log.fmt_error(msg)
+				error(msg)
+			end
+
+			return vim.uri_from_bufnr(buffer)
+		end)
+		:thenCall(function(uri)
+			return self.test_client:find_test_types_and_methods(uri)
+		end)
+end
+
+---Run the given test
+---@param tests JavaTestFindJavaProjectsResponse
+---@return Promise
 function M:run_test(tests)
 	---@type JavaTestJunitLaunchArguments
 	local launch_args
@@ -116,58 +129,9 @@ function M:run_test(tests)
 
 				log.debug('dap launcher config is: ', dap_launcher_config)
 
-				return M.dap_run(dap_launcher_config)
+				return JavaDap.dap_run(dap_launcher_config)
 			end
 		)
-end
-
-function M.dap_run(config)
-	log.info('running dap with config: ', config)
-
-	local function get_stream_reader(conn)
-		return vim.schedule_wrap(function(err, buffer)
-			assert(not err, err)
-
-			if buffer then
-				vim.print(buffer)
-			else
-				conn:close()
-			end
-		end)
-	end
-
-	---@type uv_tcp_t
-	local server
-
-	require('dap').run(config, {
-		before = function(conf)
-			log.debug('running before dap callback')
-
-			server = assert(vim.loop.new_tcp(), 'uv.new_tcp() must return handle')
-			server:bind('127.0.0.1', 0)
-			server:listen(128, function(err)
-				assert(not err, err)
-
-				local sock = assert(vim.loop.new_tcp(), 'uv.new_tcp must return handle')
-				server:accept(sock)
-				sock:read_start(get_stream_reader(sock))
-			end)
-
-			conf.args =
-				conf.args:gsub('-port ([0-9]+)', '-port ' .. server:getsockname().port)
-
-			return conf
-		end,
-
-		after = function()
-			vim.debug('running after dap callback')
-
-			if server then
-				server:shutdown()
-				server:close()
-			end
-		end,
-	})
 end
 
 return M

@@ -24,7 +24,6 @@ local M = {}
 ---@field postDebugTask? string
 
 ---Returns the launcher config
----@param test_details JavaTestDetails | JavaTestDetails[]
 ---@param launch_args JavaTestJunitLaunchArguments
 ---@param java_exec JavaDebugResolveJavaExecutableResponse
 ---@param config { debug: boolean, label: string }
@@ -91,6 +90,38 @@ function M.get_test_names(tests)
 
 		return test.jdtHandler
 	end)
+end
+
+---@class JavaDapConfiguration
+---@field name string
+---@field projectName string
+---@field mainClass string
+---@field javaExec string
+---@field modulePaths string[]
+---@field classPaths string[]
+---@field request string
+
+---Returns the dap config record
+---@param main JavaDebugResolveMainClassRecord
+---@param classpath JavaDebugResolveClasspathResponse
+---@param java_exec JavaDebugResolveJavaExecutableResponse
+---@return JavaDapConfiguration
+function M.get_dap_config(main, classpath, java_exec)
+	local project_name = main.projectName
+	local main_class = main.mainClass
+	local module_paths = classpath[1]
+	local class_paths = classpath[2]
+
+	return {
+		request = 'launch',
+		type = 'java',
+		name = string.format('%s -> %s', project_name, main_class),
+		projectName = project_name,
+		mainClass = main_class,
+		javaExec = java_exec,
+		modulePaths = module_paths,
+		classPaths = class_paths,
+	}
 end
 
 return M

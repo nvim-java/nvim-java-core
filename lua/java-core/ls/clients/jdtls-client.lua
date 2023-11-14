@@ -1,7 +1,7 @@
 local log = require('java-core.utils.log')
 local Promise = require('java-core.utils.promise')
 
----@class JDTLSClient
+---@class JavaCoreJdtlsClient
 ---@field client LSPClient
 local M = {}
 

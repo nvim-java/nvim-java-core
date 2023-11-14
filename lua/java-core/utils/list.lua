@@ -91,4 +91,25 @@ function M:join(separator)
 	return table.concat(self, separator)
 end
 
+---Calls the given callback for each element
+---@param callback fun(value: any, index: integer)
+function M:for_each(callback)
+	for i, v in ipairs(self) do
+		callback(v, i)
+	end
+end
+
+---Returns true if every element in the list passes the validation
+---@param validator fun(value: any, index: integer): boolean
+---@return boolean
+function M:every(validator)
+	for i, v in ipairs(self) do
+		if not validator(v, i) then
+			return false
+		end
+	end
+
+	return true
+end
+
 return M
