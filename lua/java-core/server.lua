@@ -19,14 +19,13 @@ M.plugins = {
 	{ name = 'java-debug-adapter', path = '/*.jar' },
 }
 
----Returns a configuration for jdtls that you can pass into the setup of nvim-lspconfig
---
 ---@class JavaGetConfigOptions
 ---@field root_markers string[] list of files to find the root dir of a project
 ---Ex:- { 'pom.xml', 'build.gradle', '.git' }
----
---
+
+---Returns a configuration for jdtls that you can pass into the setup of nvim-lspconfig
 ---@param opts JavaGetConfigOptions
+---@return LSPSetupConfig # jdtls setup configuration
 function M.get_config(opts)
 	log.info('generating jdtls config')
 
@@ -65,9 +64,28 @@ function M.get_config(opts)
 		init_options = {
 			bundles = plugins,
 			workspace = workspace.get_default_workspace(),
+			extendedClientCapabilities = {
+				classFileContentsSupport = true,
+				generateToStringPromptSupport = true,
+				hashCodeEqualsPromptSupport = true,
+				advancedExtractRefactoringSupport = true,
+				advancedOrganizeImportsSupport = true,
+				generateConstructorsPromptSupport = true,
+				generateDelegateMethodsPromptSupport = true,
+				moveRefactoringSupport = true,
+				overrideMethodsPromptSupport = true,
+				executeClientCommandSupport = true,
+				inferSelectionSupport = {
+					'extractMethod',
+					'extractVariable',
+					'extractConstant',
+					'extractVariableAllOccurrence',
+				},
+			},
 		},
 
 		root_dir = M.get_root_finder(opts.root_markers),
+		capabilities = vim.lsp.protocol.make_client_capabilities(),
 	}
 
 	log.debug('generated config: ', conf)
