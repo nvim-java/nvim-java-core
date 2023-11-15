@@ -4,7 +4,26 @@ local JavaTestClient = require('java-core.ls.clients.java-test-client')
 
 local M = {}
 
----@class JavaTestLauncherConfig
+---@class JavaTestLauncherConfigOverridable: JavaDapConfiguration
+---@field name? string
+---@field type? string
+---@field request? string
+---@field mainClass? string
+---@field projectName? string
+---@field cwd? string
+---@field classPaths? string[]
+---@field modulePaths? string[]
+---@field vmArgs? string
+---@field noDebug? boolean
+---@field javaExec? string
+---@field args? string
+---@field env? { [string]: string; }
+---@field envFile? string
+---@field sourcePaths? string[]
+---@field preLaunchTask? string
+---@field postDebugTask? string
+
+---@class JavaTestLauncherConfig: JavaDapConfiguration
 ---@field name string
 ---@field type string
 ---@field request string
