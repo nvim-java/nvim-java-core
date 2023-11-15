@@ -5,8 +5,13 @@ local Promise = require('java-core.utils.promise')
 ---@field client LSPClient
 local M = {}
 
-function M:new(o)
-	o = o or {}
+---@param args { client: LSPClient }
+---@return JavaCoreJdtlsClient
+function M:new(args)
+	local o = {
+		client = (args or {}).client,
+	}
+
 	setmetatable(o, self)
 	self.__index = self
 	return o
@@ -16,7 +21,7 @@ end
 ---@param command string
 ---@param arguments? string | string[]
 ---@param buffer? integer
----@return Promise
+---@return Promise # Promise<any>
 function M:execute_command(command, arguments, buffer)
 	return Promise.new(function(resolve, reject)
 		local cmd_info = {
@@ -34,6 +39,13 @@ function M:execute_command(command, arguments, buffer)
 			end
 		end, buffer)
 	end)
+end
+
+---Returns the decompiled class file content
+---@param uri string uri of the class file
+---@return Promise # Promise<string> - decompiled file content
+function M:java_decompile(uri)
+	return self:execute_command('java.decompile', { uri })
 end
 
 function M:get_capability(...)

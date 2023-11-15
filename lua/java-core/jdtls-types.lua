@@ -1,6 +1,6 @@
 local M = {}
 ---@class InitializationOptions
----@field bundles? string
+---@field bundles? string[]
 ---@field workspaceFolders? string
 ---@field settings? JavaConfigurationSettings
 
