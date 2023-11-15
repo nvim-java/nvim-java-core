@@ -105,7 +105,7 @@ function M.dap_run(config)
 	---@type uv_tcp_t
 	local server
 
-	require('dap').run(config, {
+	require('dap').run(config --[[@as Configuration]], {
 		before = function(conf)
 			log.debug('running before dap callback')
 

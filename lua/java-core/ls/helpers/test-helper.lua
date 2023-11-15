@@ -98,8 +98,9 @@ end
 
 ---Run the given test
 ---@param tests JavaTestFindJavaProjectsResponse
+---@param config? JavaTestLauncherConfigOverridable config to override the default values in test launcher config
 ---@return Promise
-function M:run_test(tests)
+function M:run_test(tests, config)
 	---@type JavaTestJunitLaunchArguments
 	local launch_args
 
@@ -128,6 +129,9 @@ function M:run_test(tests)
 					})
 
 				log.debug('dap launcher config is: ', dap_launcher_config)
+
+				dap_launcher_config =
+					vim.tbl_deep_extend('force', dap_launcher_config, config or {})
 
 				return JavaDap.dap_run(dap_launcher_config)
 			end
