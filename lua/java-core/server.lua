@@ -86,6 +86,15 @@ function M.get_config(opts)
 
 		root_dir = M.get_root_finder(opts.root_markers),
 		capabilities = vim.lsp.protocol.make_client_capabilities(),
+
+		handlers = {
+			--@TODO
+			--overriding '$/progress' is necessary because by default it's using the
+			--lspconfig progress handler which prints the wrong value in the latest
+			--jdtls version (tested on 1.29.0).
+			--https://github.com/neovim/nvim-lspconfig/issues/2897
+			['$/progress'] = vim.lsp.handlers['$/progress'],
+		},
 	}
 
 	log.debug('generated config: ', conf)
