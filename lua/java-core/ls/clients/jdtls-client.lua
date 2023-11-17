@@ -2,10 +2,10 @@ local log = require('java-core.utils.log')
 local Promise = require('java-core.utils.promise')
 
 ---@class JavaCoreJdtlsClient
----@field client LSPClient
+---@field client LspClient
 local M = {}
 
----@param args { client: LSPClient }
+---@param args { client: LspClient }
 ---@return JavaCoreJdtlsClient
 function M:new(args)
 	local o = {

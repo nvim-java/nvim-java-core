@@ -14,7 +14,7 @@ local JavaDap = require('java-core.dap')
 local M = {}
 
 ---Returns a new test helper client
----@param args { client: LSPClient }
+---@param args { client: LspClient }
 ---@return JavaCoreTestHelper
 function M:new(args)
 	local o = {

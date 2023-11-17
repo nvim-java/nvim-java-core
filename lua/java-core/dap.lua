@@ -5,12 +5,12 @@ local JavaDebug = require('java-core.ls.clients.java-debug-client')
 local Promise = require('java-core.utils.promise')
 
 ---@class JavaCoreDap
----@field client LSPClient
+---@field client LspClient
 ---@field java_debug JavaCoreDebugClient
 local M = {}
 
 ---Returns a new dap instance
----@param args { client: LSPClient }
+---@param args { client: LspClient }
 ---@return JavaCoreDap
 function M:new(args)
 	local o = {

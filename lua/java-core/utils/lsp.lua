@@ -5,7 +5,7 @@ local M = {}
 
 ---Returns the client by name of the language server
 ---@param name string name of the language server
----@return LSPClient | nil
+---@return LspClient | nil
 function M.find_client_by_name(name)
 	local clients = List:new(vim.lsp.get_active_clients())
 
@@ -15,7 +15,7 @@ function M.find_client_by_name(name)
 end
 
 ---Returns the jdtls client object
----@return LSPClient
+---@return LspClient
 function M.get_jdtls_client()
 	local client = M.find_client_by_name('jdtls')
 

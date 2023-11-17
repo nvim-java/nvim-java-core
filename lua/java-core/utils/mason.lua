@@ -18,7 +18,7 @@ end
 
 ---Returns the shared artifact path for a given package
 ---@param pkg_name string name of the package to get the path of
----@return string
+---@return string # path to the shared artifact directory of the package
 function M.get_shared_path(pkg_name)
 	return vim.fn.glob('$MASON/share/' .. pkg_name)
 end
