@@ -29,12 +29,14 @@ function M:execute_command(command, arguments, buffer)
 			arguments = arguments,
 		}
 
-		log.debug('workspace/executeCommand: ', cmd_info)
+		log.fmt_debug('executing: workspace/executeCommand - %s', command)
 
 		self.client.request('workspace/executeCommand', cmd_info, function(err, res)
 			if err then
+				log.fmt_error('%s failed! args: %s error: %s', command, arguments, err)
 				reject(err)
 			else
+				log.fmt_debug('%s success! response: %s', command, res)
 				resolve(res)
 			end
 		end, buffer)
