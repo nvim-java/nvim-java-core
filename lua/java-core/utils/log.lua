@@ -137,6 +137,9 @@ log.new = function(config, standalone)
 			local fp = io.open(outfile, 'a')
 			local str =
 				string.format('[%-6s%s] %s: %s\n', nameupper, os.date(), lineinfo, msg)
+
+			assert(fp, 'cannot open file: ' .. ' to write logs')
+
 			fp:write(str)
 			fp:close()
 		end
@@ -162,6 +165,5 @@ log.new = function(config, standalone)
 end
 
 log.new(default_config, true)
--- }}}
 
 return log

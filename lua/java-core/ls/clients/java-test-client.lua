@@ -1,7 +1,7 @@
 local log = require('java-core.utils.log')
-local JDTLSClient = require('java-core.ls.clients.jdtls-client')
+local JdtlsClient = require('java-core.ls.clients.jdtls-client')
 
----@class JavaTestDetails: Configuration
+---@class JavaCoreTestDetails: Configuration
 ---@field fullName string
 ---@field id string
 ---@field jdtHandler string
@@ -11,15 +11,15 @@ local JDTLSClient = require('java-core.ls.clients.jdtls-client')
 ---@field testLevel integer
 ---@field uri string
 
----@class JavaTestDetailsWithRange: JavaTestDetails
+---@class JavaCoreTestDetailsWithRange: JavaCoreTestDetails
 ---@field range Range
 
----@class JavaTestDetailsWithChildren: JavaTestDetails
----@field children JavaTestDetailsWithRange[]
+---@class JavaCoreTestDetailsWithChildren: JavaCoreTestDetails
+---@field children JavaCoreTestDetailsWithRange[]
 
----@class JavaTestDetailsWithChildrenAndRange: JavaTestDetails
+---@class JavaCoreTestDetailsWithChildrenAndRange: JavaCoreTestDetails
 ---@field range Range
----@field children JavaTestDetailsWithRange[]
+---@field children JavaCoreTestDetailsWithRange[]
 
 ---@class Range
 ---@field start CursorPoint
@@ -30,12 +30,10 @@ local JDTLSClient = require('java-core.ls.clients.jdtls-client')
 ---@field character integer
 
 ---@class JavaCoreTestClient: JavaCoreJdtlsClient
-local M = JDTLSClient:new()
-
----@alias JavaTestFindJavaProjectsResponse JavaTestDetails[]
+local M = JdtlsClient:new()
 
 ---Returns a list of project details in the current root
----@return Promise
+---@return Promise # Promise<JavaCoreTestDetails[]>
 function M:find_java_projects()
 	return self:execute_command(
 		'vscode.java.test.findJavaProjects',
@@ -43,11 +41,10 @@ function M:find_java_projects()
 	)
 end
 
----@alias JavaTestFindTestPackagesAndTypesResponse JavaTestDetailsWithChildren[]
-
 ---Returns a list of test package details
----@param token any
----@return Promise
+---@param handler string
+---@param token? string
+---@return Promise # Promise<JavaCoreTestDetailsWithChildren[]>
 function M:find_test_packages_and_types(handler, token)
 	return self:execute_command(
 		'vscode.java.test.findTestPackagesAndTypes',
@@ -55,12 +52,10 @@ function M:find_test_packages_and_types(handler, token)
 	)
 end
 
----@alias JavaTestFindTestTypesAndMethodsResponse JavaTestDetailsWithChildrenAndRange[]
-
 ---Returns test informations in a given file
 ---@param file_uri string
----@param token any
----@return Promise
+---@param token? string
+---@return Promise # Promise<JavaCoreTestDetailsWithChildrenAndRange[]>
 function M:find_test_types_and_methods(file_uri, token)
 	return self:execute_command(
 		'vscode.java.test.findTestTypesAndMethods',
@@ -68,7 +63,7 @@ function M:find_test_types_and_methods(file_uri, token)
 	)
 end
 
----@class JavaTestJunitLaunchArguments
+---@class JavaCoreTestJunitLaunchArguments
 ---@field classpath string[]
 ---@field mainClass string
 ---@field modulepath string[]
@@ -77,15 +72,15 @@ end
 ---@field vmArguments string[]
 ---@field workingDirectory string
 
----@class JavaTestResolveJUnitLaunchArgumentsParams
+---@class JavaCoreTestResolveJUnitLaunchArgumentsParams
 ---@field project_name string
 ---@field test_names string[]
----@field test_level TestLevel
----@field test_kind TestKind
+---@field test_level JavaCoreTestLevel
+---@field test_kind JavaCoreTestKind
 
 ---Returns junit launch arguments
----@param args JavaTestResolveJUnitLaunchArgumentsParams
----@return Promise
+---@param args JavaCoreTestResolveJUnitLaunchArgumentsParams
+---@return Promise # Promise<JavaTestJunitLaunchArguments>
 function M:resolve_junit_launch_arguments(args)
 	return self
 		:execute_command(
@@ -94,11 +89,11 @@ function M:resolve_junit_launch_arguments(args)
 		)
 		:thenCall(
 
-			---@class JavaTestJunitLaunchArgumentsResponse
-			---@field body JavaTestJunitLaunchArguments
+			---@class JavaCoreTestJunitLaunchArgumentsResponse
+			---@field body JavaCoreTestJunitLaunchArguments
 			---@field status integer
 
-			---@param res JavaTestJunitLaunchArgumentsResponse
+			---@param res JavaCoreTestJunitLaunchArgumentsResponse
 			function(res)
 				if not res.body then
 					local msg = 'Failed to retrive JUnit launch arguments'
@@ -112,7 +107,7 @@ function M:resolve_junit_launch_arguments(args)
 		)
 end
 
----@enum TestKind
+---@enum JavaCoreTestKind
 M.TestKind = {
 	JUnit5 = 0,
 	JUnit = 1,
@@ -120,7 +115,7 @@ M.TestKind = {
 	None = 100,
 }
 
----@enum TestLevel
+---@enum JavaCoreTestLevel
 M.TestLevel = {
 	Root = 0,
 	Workspace = 1,

@@ -1,5 +1,5 @@
 local log = require('java-core.utils.log')
-local adapters = require('java-core.ls.adapters.test-adapter')
+local adapters = require('java-core.dap.adapters')
 local List = require('java-core.utils.list')
 local JavaDebug = require('java-core.ls.clients.java-debug-client')
 local Promise = require('java-core.utils.promise')
@@ -26,18 +26,18 @@ function M:new(args)
 	return o
 end
 
----@class JavaDapAdapter
+---@class JavaCoreDapAdapter
 ---@field type string
 ---@field host string
 ---@field port integer
 
 ---Returns the dap adapter config
----@return Promise
+---@return Promise # Promise<JavaCoreDapAdapter>
 function M:get_dap_adapter()
 	log.info('creating dap adapter for java')
 
 	return self.java_debug:start_debug_session():thenCall(
-		---@param port JavaDebugStartDebugSessionResponse
+		---@param port integer
 		function(port)
 			return {
 				type = 'server',
@@ -48,15 +48,13 @@ function M:get_dap_adapter()
 	)
 end
 
----@alias JavaDapConfigurationList JavaDapConfiguration[]
-
 ---Returns the dap configuration for the current project
----@return Promise
+---@return Promise # Promise<JavaDapConfiguration[]>
 function M:get_dap_config()
 	log.info('creating dap configuration for java')
 
 	return self.java_debug:resolve_main_class():thenCall(
-		---@param mains JavaDebugResolveMainClassResponse
+		---@param mains JavaDebugResolveMainClassRecord[]
 		function(mains)
 			local config_promises = List:new(mains):map(function(main)
 				return self:get_dap_config_record(main)
@@ -69,71 +67,58 @@ end
 
 ---Returns the dap config for the given main class
 ---@param main JavaDebugResolveMainClassRecord
----@return Promise
+---@return Promise # Promise<JavaCoreDapLauncherConfig>
 function M:get_dap_config_record(main)
 	return Promise.all({
 		self.java_debug:resolve_classpath(main.mainClass, main.projectName),
 		self.java_debug:resolve_java_executable(main.mainClass, main.projectName),
 	}):thenCall(function(res)
-		---@type JavaDebugResolveClasspathResponse
+		---@type string[][]
 		local classpaths = res[1]
 
-		---@type JavaDebugResolveJavaExecutableResponse
+		---@type string
 		local java_exec = res[2]
 
 		return adapters.get_dap_config(main, classpaths, java_exec)
 	end)
 end
 
----Dap run with given config
----@param config JavaDapConfiguration
-function M.dap_run(config)
-	log.info('running dap with config: ', config)
-
-	local function get_stream_reader(conn)
-		return vim.schedule_wrap(function(err, buffer)
-			assert(not err, err)
-
-			if buffer then
-				vim.print(buffer)
-			else
-				conn:close()
-			end
-		end)
-	end
-
-	---@type uv_tcp_t
-	local server
-
-	require('dap').run(config --[[@as Configuration]], {
-		before = function(conf)
-			log.debug('running before dap callback')
-
-			server = assert(vim.loop.new_tcp(), 'uv.new_tcp() must return handle')
-			server:bind('127.0.0.1', 0)
-			server:listen(128, function(err)
-				assert(not err, err)
-
-				local sock = assert(vim.loop.new_tcp(), 'uv.new_tcp must return handle')
-				server:accept(sock)
-				sock:read_start(get_stream_reader(sock))
-			end)
-
-			conf.args =
-				conf.args:gsub('-port ([0-9]+)', '-port ' .. server:getsockname().port)
-
-			return conf
-		end,
-
-		after = function()
-			vim.debug('running after dap callback')
-
-			if server then
-				server:shutdown()
-				server:close()
-			end
-		end,
-	})
-end
-
 return M
+
+---@class JavaCoreDapLauncherConfigOverridable
+---@field name? string
+---@field type? string
+---@field request? string
+---@field mainClass? string
+---@field projectName? string
+---@field cwd? string
+---@field classPaths? string[]
+---@field modulePaths? string[]
+---@field vmArgs? string
+---@field noDebug? boolean
+---@field javaExec? string
+---@field args? string
+---@field env? { [string]: string; }
+---@field envFile? string
+---@field sourcePaths? string[]
+---@field preLaunchTask? string
+---@field postDebugTask? string
+
+---@class JavaCoreDapLauncherConfig
+---@field name string
+---@field type string
+---@field request string
+---@field mainClass string
+---@field projectName string
+---@field cwd string
+---@field classPaths string[]
+---@field modulePaths string[]
+---@field vmArgs string
+---@field noDebug boolean
+---@field javaExec string
+---@field args string
+---@field env? { [string]: string; }
+---@field envFile? string
+---@field sourcePaths string[]
+---@field preLaunchTask? string
+---@field postDebugTask? string
