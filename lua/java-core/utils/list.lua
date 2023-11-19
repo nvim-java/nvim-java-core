@@ -36,7 +36,7 @@ end
 function M:map(mapper)
 	local mapped = M:new()
 
-	for i, v in ipairs(self) do
+	for _, v in ipairs(self) do
 		mapped:push(mapper(v))
 	end
 

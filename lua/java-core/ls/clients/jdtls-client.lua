@@ -2,10 +2,10 @@ local log = require('java-core.utils.log')
 local Promise = require('java-core.utils.promise')
 
 ---@class JavaCoreJdtlsClient
----@field client LSPClient
+---@field client LspClient
 local M = {}
 
----@param args { client: LSPClient }
+---@param args? { client: LspClient }
 ---@return JavaCoreJdtlsClient
 function M:new(args)
 	local o = {
@@ -29,12 +29,14 @@ function M:execute_command(command, arguments, buffer)
 			arguments = arguments,
 		}
 
-		log.debug('workspace/executeCommand: ', cmd_info)
+		log.debug('executing: workspace/executeCommand - ' .. command)
 
 		self.client.request('workspace/executeCommand', cmd_info, function(err, res)
 			if err then
+				log.error(command .. ' failed! arguments: ', arguments, ' error: ', err)
 				reject(err)
 			else
+				log.debug(command .. ' success! response: ', res)
 				resolve(res)
 			end
 		end, buffer)
@@ -63,6 +65,9 @@ function M:get_capability(...)
 	return capability
 end
 
+---Returns true if the LS supports the given command
+---@param command_name string name of the command
+---@return boolean
 function M:has_command(command_name)
 	local commands = self:get_capability('executeCommandProvider', 'commands')
 

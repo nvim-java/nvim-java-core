@@ -16,15 +16,14 @@ local M = {}
 
 ---Returns a configuration for jdtls that you can pass into the setup of nvim-lspconfig
 ---@param opts JavaCoreGetConfigOptions
----@return LSPSetupConfig # jdtls setup configuration
+---@return LspSetupConfig # jdtls setup configuration
 function M.get_config(opts)
 	log.debug('generating jdtls config')
 
 	local jdtls_path = mason.get_pkg_path('jdtls')
 	local lombok_path = path.join(jdtls_path, 'lombok.jar')
 	local jdtls_cache_path = path.join(vim.fn.stdpath('cache'), 'jdtls')
-	local plugin_paths =
-		plugins.get_plugin_paths({ 'java-test', 'java-debug-adapter' })
+	local plugin_paths = plugins.get_plugin_paths(opts.jdtls_plugins)
 
 	local base_config = config.get_config()
 
@@ -49,16 +48,15 @@ end
 ---Returns a function that finds the java project root
 ---@private
 ---@param root_markers string[] list of files to find the root dir of a project
----@return function
+---@return fun(file_name: string): string | nil
 function M.get_root_finder(root_markers)
 	return function(file_name)
-		log.info('finding the root_dir')
-		log.debug('root_markers: ', root_markers)
+		log.debug('finding the root_dir with root_markers ', root_markers)
 
 		local root = util.root_pattern(unpack(root_markers))(file_name)
 
 		if root then
-			log.fmt_debug('root of: %s is: %s', file_name, root)
+			log.debug('root of ' .. file_name .. ' is ' .. root)
 			return root
 		end
 	end
