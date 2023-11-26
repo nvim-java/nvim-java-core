@@ -37,7 +37,7 @@ end
 
 ---Ruterns the launch argument parameters for given test or tests
 ---@param tests JavaCoreTestDetails | JavaCoreTestDetails[]
----@return JavaCoreTestResolveJUnitLaunchArgumentsParams
+---@return JavaCoreTestResolveJUnitLaunchArgumentsParams # junit launch arguments
 function M.get_junit_launch_argument_params(tests)
 	if not vim.tbl_islist(tests) then
 		return {

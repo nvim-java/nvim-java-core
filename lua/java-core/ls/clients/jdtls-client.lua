@@ -1,5 +1,6 @@
 local log = require('java-core.utils.log')
-local Promise = require('java-core.utils.promise')
+local async = require('java-core.utils.async')
+local await = async.wait_handle_error
 
 ---@class JavaCoreJdtlsClient
 ---@field client LspClient
@@ -21,31 +22,38 @@ end
 ---@param command string
 ---@param arguments? string | string[]
 ---@param buffer? integer
----@return Promise # Promise<any>
+---@return any
 function M:execute_command(command, arguments, buffer)
-	return Promise.new(function(resolve, reject)
-		local cmd_info = {
-			command = command,
-			arguments = arguments,
-		}
+	log.debug('executing: workspace/executeCommand - ' .. command)
 
-		log.debug('executing: workspace/executeCommand - ' .. command)
+	local cmd_info = {
+		command = command,
+		arguments = arguments,
+	}
 
-		self.client.request('workspace/executeCommand', cmd_info, function(err, res)
+	return await(function(callback)
+		local on_response = function(err, result)
 			if err then
 				log.error(command .. ' failed! arguments: ', arguments, ' error: ', err)
-				reject(err)
 			else
-				log.debug(command .. ' success! response: ', res)
-				resolve(res)
+				log.debug(command .. ' success! response: ', result)
 			end
-		end, buffer)
+
+			callback(err, result)
+		end
+
+		return self.client.request(
+			'workspace/executeCommand',
+			cmd_info,
+			on_response,
+			buffer
+		)
 	end)
 end
 
 ---Returns the decompiled class file content
 ---@param uri string uri of the class file
----@return Promise # Promise<string> - decompiled file content
+---@return string # decompiled file content
 function M:java_decompile(uri)
 	return self:execute_command('java.decompile', { uri })
 end
@@ -67,7 +75,7 @@ end
 
 ---Returns true if the LS supports the given command
 ---@param command_name string name of the command
----@return boolean
+---@return boolean # true if the command is supported
 function M:has_command(command_name)
 	local commands = self:get_capability('executeCommandProvider', 'commands')
 
