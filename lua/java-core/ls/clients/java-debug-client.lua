@@ -9,7 +9,7 @@ local M = JdtlsClient:new()
 ---@field fileName string
 
 ---Returns a list of main classes in the current workspace
----@return Promise # Promise<JavaDebugResolveMainClassRecord[]>
+---@return JavaDebugResolveMainClassRecord[] # resolved main class
 function M:resolve_main_class()
 	return self:execute_command('vscode.java.resolveMainClass')
 end
@@ -17,7 +17,7 @@ end
 ---Returns module paths and class paths of a given main class
 ---@param project_name string
 ---@param main_class string
----@return Promise # Promise<string[][]>
+---@return string[][] # resolved class and module paths
 function M:resolve_classpath(main_class, project_name)
 	return self:execute_command(
 		'vscode.java.resolveClasspath',
@@ -28,7 +28,7 @@ end
 ---Returns the path to java executable for a given main class
 ---@param project_name string
 ---@param main_class string
----@return Promise # Promise<string>
+---@return string # path to java executable
 function M:resolve_java_executable(main_class, project_name)
 	return self:execute_command('vscode.java.resolveJavaExecutable', {
 		main_class,
@@ -41,7 +41,7 @@ end
 ---@param main_class string
 ---@param inheritedOptions boolean
 ---@param expectedOptions { [string]: any }
----@return Promise # Promise<boolean>
+---@return boolean # true if the setting is the expected setting
 function M:check_project_settings(
 	main_class,
 	project_name,
@@ -60,7 +60,7 @@ function M:check_project_settings(
 end
 
 ---Starts a debug session and returns the port number
----@return Promise # Promise<integer>
+---@return integer # port number of the debug session
 function M:start_debug_session()
 	return self:execute_command('vscode.java.startDebugSession')
 end
@@ -78,7 +78,7 @@ M.CompileWorkspaceStatus = {
 ---@param project_name? string
 ---@param file_path? string
 ---@param is_full_build boolean
----@return Promise # Promise<CompileWorkspaceStatus>
+---@return CompileWorkspaceStatus # compiled status
 function M:build_workspace(main_class, project_name, file_path, is_full_build)
 	return self:execute_command(
 		'vscode.java.buildWorkspace',

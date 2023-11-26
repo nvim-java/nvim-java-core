@@ -1,10 +1,10 @@
-local util = require('lspconfig.util')
-local path = require('java-core.utils.path')
-local mason = require('java-core.utils.mason')
-local plugins = require('java-core.ls.servers.jdtls.plugins')
-local log = require('java-core.utils.log')
-local workspace = require('java-core.ls.servers.jdtls.workspace')
 local config = require('java-core.ls.servers.jdtls.config')
+local log = require('java-core.utils.log')
+local mason = require('java-core.utils.mason')
+local path = require('java-core.utils.path')
+local plugins = require('java-core.ls.servers.jdtls.plugins')
+local util = require('lspconfig.util')
+local workspace = require('java-core.ls.servers.jdtls.workspace')
 
 local M = {}
 

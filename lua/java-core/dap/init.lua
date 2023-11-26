@@ -1,8 +1,6 @@
 local log = require('java-core.utils.log')
 local adapters = require('java-core.dap.adapters')
-local List = require('java-core.utils.list')
 local JavaDebug = require('java-core.ls.clients.java-debug-client')
-local Promise = require('java-core.utils.promise')
 
 ---@class JavaCoreDap
 ---@field client LspClient
@@ -32,55 +30,45 @@ end
 ---@field port integer
 
 ---Returns the dap adapter config
----@return Promise # Promise<JavaCoreDapAdapter>
+---@return JavaCoreDapAdapter # dap adapter details
 function M:get_dap_adapter()
-	log.info('creating dap adapter for java')
+	log.debug('creating dap adapter for java')
 
-	return self.java_debug:start_debug_session():thenCall(
-		---@param port integer
-		function(port)
-			return {
-				type = 'server',
-				host = '127.0.0.1',
-				port = port,
-			}
-		end
-	)
+	local port = self.java_debug:start_debug_session()
+
+	return {
+		type = 'server',
+		host = '127.0.0.1',
+		port = port,
+	}
 end
 
 ---Returns the dap configuration for the current project
----@return Promise # Promise<JavaDapConfiguration[]>
+---@return JavaCoreDapLauncherConfig[] # dap configuration details
 function M:get_dap_config()
 	log.info('creating dap configuration for java')
 
-	return self.java_debug:resolve_main_class():thenCall(
-		---@param mains JavaDebugResolveMainClassRecord[]
-		function(mains)
-			local config_promises = List:new(mains):map(function(main)
-				return self:get_dap_config_record(main)
-			end)
+	local mains = self.java_debug:resolve_main_class()
+	local config = {}
 
-			return Promise.all(config_promises)
-		end
-	)
+	for _, main in ipairs(mains) do
+		table.insert(config, self:get_dap_config_record(main))
+	end
+
+	return config
 end
 
 ---Returns the dap config for the given main class
 ---@param main JavaDebugResolveMainClassRecord
----@return Promise # Promise<JavaCoreDapLauncherConfig>
+---@return JavaCoreDapLauncherConfig # dap launch configuration record
 function M:get_dap_config_record(main)
-	return Promise.all({
-		self.java_debug:resolve_classpath(main.mainClass, main.projectName),
-		self.java_debug:resolve_java_executable(main.mainClass, main.projectName),
-	}):thenCall(function(res)
-		---@type string[][]
-		local classpaths = res[1]
+	local classpaths =
+		self.java_debug:resolve_classpath(main.mainClass, main.projectName)
 
-		---@type string
-		local java_exec = res[2]
+	local java_exec =
+		self.java_debug:resolve_java_executable(main.mainClass, main.projectName)
 
-		return adapters.get_dap_config(main, classpaths, java_exec)
-	end)
+	return adapters.get_dap_config(main, classpaths, java_exec)
 end
 
 return M

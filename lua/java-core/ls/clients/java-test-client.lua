@@ -33,7 +33,7 @@ local JdtlsClient = require('java-core.ls.clients.jdtls-client')
 local M = JdtlsClient:new()
 
 ---Returns a list of project details in the current root
----@return Promise # Promise<JavaCoreTestDetails[]>
+---@return JavaCoreTestDetails[] # test details of the projects
 function M:find_java_projects()
 	return self:execute_command(
 		'vscode.java.test.findJavaProjects',
@@ -44,7 +44,7 @@ end
 ---Returns a list of test package details
 ---@param handler string
 ---@param token? string
----@return Promise # Promise<JavaCoreTestDetailsWithChildren[]>
+---@return JavaCoreTestDetailsWithChildren[] # test package details
 function M:find_test_packages_and_types(handler, token)
 	return self:execute_command(
 		'vscode.java.test.findTestPackagesAndTypes',
@@ -55,7 +55,7 @@ end
 ---Returns test informations in a given file
 ---@param file_uri string
 ---@param token? string
----@return Promise # Promise<JavaCoreTestDetailsWithChildrenAndRange[]>
+---@return JavaCoreTestDetailsWithChildrenAndRange[] # test details
 function M:find_test_types_and_methods(file_uri, token)
 	return self:execute_command(
 		'vscode.java.test.findTestTypesAndMethods',
@@ -80,31 +80,21 @@ end
 
 ---Returns junit launch arguments
 ---@param args JavaCoreTestResolveJUnitLaunchArgumentsParams
----@return Promise # Promise<JavaTestJunitLaunchArguments>
+---@return JavaCoreTestJunitLaunchArguments # junit launch arguments
 function M:resolve_junit_launch_arguments(args)
-	return self
-		:execute_command(
-			'vscode.java.test.junit.argument',
-			vim.fn.json_encode(args)
-		)
-		:thenCall(
+	local launch_args = self:execute_command(
+		'vscode.java.test.junit.argument',
+		vim.fn.json_encode(args)
+	)
 
-			---@class JavaCoreTestJunitLaunchArgumentsResponse
-			---@field body JavaCoreTestJunitLaunchArguments
-			---@field status integer
+	if not launch_args.body then
+		local msg = 'Failed to retrive JUnit launch arguments'
 
-			---@param res JavaCoreTestJunitLaunchArgumentsResponse
-			function(res)
-				if not res.body then
-					local msg = 'Failed to retrive JUnit launch arguments'
+		log.error(msg, launch_args)
+		error(msg)
+	end
 
-					log.error(msg, res)
-					error(msg)
-				end
-
-				return res.body
-			end
-		)
+	return launch_args.body
 end
 
 ---@enum JavaCoreTestKind
