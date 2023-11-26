@@ -1,3 +1,5 @@
+local jdtls_types = require('java-core.ls.servers.jdtls.jdtls-types')
+
 local List = require('java-core.utils.list')
 local Set = require('java-core.utils.set')
 local JavaTestClient = require('java-core.ls.clients.java-test-client')
@@ -36,7 +38,7 @@ function M.get_dap_launcher_config(launch_args, java_exec, config)
 end
 
 ---Ruterns the launch argument parameters for given test or tests
----@param tests JavaCoreTestDetails | JavaCoreTestDetails[]
+---@param tests java_core.TestDetails | java_core.TestDetails[]
 ---@return JavaCoreTestResolveJUnitLaunchArgumentsParams # junit launch arguments
 function M.get_junit_launch_argument_params(tests)
 	if not vim.tbl_islist(tests) then
@@ -59,7 +61,7 @@ function M.get_junit_launch_argument_params(tests)
 end
 
 ---Returns a list of test names to be passed to test launch arguments resolver
----@param tests JavaCoreTestDetails[]
+---@param tests java_core.TestDetails[]
 ---@return List
 function M.get_test_names(tests)
 	return List:new(tests):map(function(test)

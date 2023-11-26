@@ -2,12 +2,12 @@ local log = require('java-core.utils.log')
 local async = require('java-core.utils.async')
 local await = async.wait_handle_error
 
----@class JavaCoreJdtlsClient
+---@class java_core.JdtlsClient
 ---@field client LspClient
 local M = {}
 
 ---@param args? { client: LspClient }
----@return JavaCoreJdtlsClient
+---@return java_core.JdtlsClient
 function M:new(args)
 	local o = {
 		client = (args or {}).client,
