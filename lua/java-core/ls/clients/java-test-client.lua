@@ -1,7 +1,7 @@
 local log = require('java-core.utils.log')
 local JdtlsClient = require('java-core.ls.clients.jdtls-client')
 
----@class JavaCoreTestDetails: Configuration
+---@class java_core.TestDetails: Configuration
 ---@field fullName string
 ---@field id string
 ---@field jdtHandler string
@@ -11,17 +11,17 @@ local JdtlsClient = require('java-core.ls.clients.jdtls-client')
 ---@field testLevel integer
 ---@field uri string
 
----@class JavaCoreTestDetailsWithRange: JavaCoreTestDetails
----@field range Range
+---@class java_core.TestDetailsWithRange: java_core.TestDetails
+---@field range java_core.TestRange
 
----@class JavaCoreTestDetailsWithChildren: JavaCoreTestDetails
----@field children JavaCoreTestDetailsWithRange[]
+---@class java_core.TestDetailsWithChildren: java_core.TestDetails
+---@field children java_core.TestDetailsWithRange[]
 
----@class JavaCoreTestDetailsWithChildrenAndRange: JavaCoreTestDetails
----@field range Range
----@field children JavaCoreTestDetailsWithRange[]
+---@class java_core.TestDetailsWithChildrenAndRange: java_core.TestDetails
+---@field range java_core.TestRange
+---@field children java_core.TestDetailsWithRange[]
 
----@class Range
+---@class java_core.TestRange
 ---@field start CursorPoint
 ---@field end CursorPoint
 
@@ -29,11 +29,11 @@ local JdtlsClient = require('java-core.ls.clients.jdtls-client')
 ---@field line integer
 ---@field character integer
 
----@class JavaCoreTestClient: JavaCoreJdtlsClient
+---@class java_core.TestClient: java_core.JdtlsClient
 local M = JdtlsClient:new()
 
 ---Returns a list of project details in the current root
----@return JavaCoreTestDetails[] # test details of the projects
+---@return java_core.TestDetails[] # test details of the projects
 function M:find_java_projects()
 	return self:execute_command(
 		'vscode.java.test.findJavaProjects',
@@ -44,7 +44,7 @@ end
 ---Returns a list of test package details
 ---@param handler string
 ---@param token? string
----@return JavaCoreTestDetailsWithChildren[] # test package details
+---@return java_core.TestDetailsWithChildren[] # test package details
 function M:find_test_packages_and_types(handler, token)
 	return self:execute_command(
 		'vscode.java.test.findTestPackagesAndTypes',
@@ -55,7 +55,7 @@ end
 ---Returns test informations in a given file
 ---@param file_uri string
 ---@param token? string
----@return JavaCoreTestDetailsWithChildrenAndRange[] # test details
+---@return java_core.TestDetailsWithChildrenAndRange[] # test details
 function M:find_test_types_and_methods(file_uri, token)
 	return self:execute_command(
 		'vscode.java.test.findTestTypesAndMethods',
@@ -75,8 +75,8 @@ end
 ---@class JavaCoreTestResolveJUnitLaunchArgumentsParams
 ---@field project_name string
 ---@field test_names string[]
----@field test_level JavaCoreTestLevel
----@field test_kind JavaCoreTestKind
+---@field test_level java_core.TestLevel
+---@field test_kind java_core.TestKind
 
 ---Returns junit launch arguments
 ---@param args JavaCoreTestResolveJUnitLaunchArgumentsParams
@@ -97,7 +97,7 @@ function M:resolve_junit_launch_arguments(args)
 	return launch_args.body
 end
 
----@enum JavaCoreTestKind
+---@enum java_core.TestKind
 M.TestKind = {
 	JUnit5 = 0,
 	JUnit = 1,
@@ -105,7 +105,7 @@ M.TestKind = {
 	None = 100,
 }
 
----@enum JavaCoreTestLevel
+---@enum java_core.TestLevel
 M.TestLevel = {
 	Root = 0,
 	Workspace = 1,

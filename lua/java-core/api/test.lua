@@ -7,9 +7,9 @@ local JavaDebug = require('java-core.ls.clients.java-debug-client')
 local JavaTest = require('java-core.ls.clients.java-test-client')
 
 ---@class JavaCoreTestApi
----@field private client JavaCoreJdtlsClient
+---@field private client java_core.JdtlsClient
 ---@field private debug_client JavaCoreDebugClient
----@field private test_client JavaCoreTestClient
+---@field private test_client java_core.TestClient
 ---@field private runner JavaCoreDapRunner
 local M = {}
 
@@ -39,6 +39,24 @@ function M:new(args)
 	return o
 end
 
+---Returns a list of test methods
+---@param file_uri string uri of the class
+---@return java_core.TestDetailsWithRange[] # list of test methods
+function M:get_test_methods(file_uri)
+	local classes = self.test_client:find_test_types_and_methods(file_uri)
+	local methods = {}
+
+	for _, class in ipairs(classes) do
+		for _, method in ipairs(class.children) do
+			---@diagnostic disable-next-line: inject-field
+			method.class = class
+			table.insert(methods, method)
+		end
+	end
+
+	return methods
+end
+
 ---Runs the test class in the given buffer
 ---@param buffer integer
 ---@param config JavaCoreDapLauncherConfigOverridable
@@ -50,7 +68,7 @@ end
 ---Returns test classes in the given buffer
 ---@priate
 ---@param buffer integer
----@return JavaCoreTestDetailsWithChildrenAndRange # get test class details
+---@return java_core.TestDetailsWithChildrenAndRange # get test class details
 function M:get_test_class_by_buffer(buffer)
 	log.debug('finding test class by buffer')
 
@@ -59,8 +77,7 @@ function M:get_test_class_by_buffer(buffer)
 end
 
 ---Run the given test
----@private
----@param tests JavaCoreTestDetails[]
+---@param tests java_core.TestDetails[]
 ---@param config? JavaCoreDapLauncherConfigOverridable config to override the default values in test launcher config
 function M:run_test(tests, config)
 	---@type JavaCoreTestJunitLaunchArguments
