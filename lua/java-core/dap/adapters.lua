@@ -4,7 +4,7 @@ local M = {}
 ---@param main JavaDebugResolveMainClassRecord
 ---@param classpath string[][]
 ---@param java_exec string
----@return JavaCoreDapLauncherConfig
+---@return java_core.DapLauncherConfig
 function M.get_dap_config(main, classpath, java_exec)
 	local project_name = main.projectName
 	local main_class = main.mainClass

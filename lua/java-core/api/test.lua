@@ -1,21 +1,19 @@
 local log = require('java-core.utils.log')
 local data_adapters = require('java-core.adapters')
 
-local TestReport = require('java-core.dap.test-report')
-local JavaDapRunner = require('java-core.dap.runner')
 local JavaDebug = require('java-core.ls.clients.java-debug-client')
 local JavaTest = require('java-core.ls.clients.java-test-client')
 
----@class JavaCoreTestApi
+---@class java_core.TestApi
 ---@field private client java_core.JdtlsClient
 ---@field private debug_client JavaCoreDebugClient
 ---@field private test_client java_core.TestClient
----@field private runner JavaCoreDapRunner
+---@field private runner java_core.DapRunner
 local M = {}
 
 ---Returns a new test helper client
----@param args { client: LspClient }
----@return JavaCoreTestApi
+---@param args { client: LspClient, runner: java_core.DapRunner }
+---@return java_core.TestApi
 function M:new(args)
 	local o = {
 		client = args.client,
@@ -29,9 +27,7 @@ function M:new(args)
 		client = args.client,
 	})
 
-	o.runner = JavaDapRunner:new({
-		reporter = TestReport:new(),
-	})
+	o.runner = args.runner
 
 	setmetatable(o, self)
 	self.__index = self
@@ -80,7 +76,6 @@ end
 ---@param tests java_core.TestDetails[]
 ---@param config? JavaCoreDapLauncherConfigOverridable config to override the default values in test launcher config
 function M:run_test(tests, config)
-	---@type JavaCoreTestJunitLaunchArguments
 	local launch_args = self.test_client:resolve_junit_launch_arguments(
 		data_adapters.get_junit_launch_argument_params(tests)
 	)

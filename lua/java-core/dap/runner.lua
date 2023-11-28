@@ -1,12 +1,12 @@
 local log = require('java-core.utils.log')
 
----@class JavaCoreDapRunner
----@field reporter JavaCoreDapRunReport
+---@class java_core.DapRunner
+---@field reporter java_core.DapRunReport
 ---@field private server uv_tcp_t
 local M = {}
 
----@param args { reporter: JavaCoreDapRunReport }
----@return JavaCoreDapRunner
+---@param args { reporter: java_core.DapRunReport }
+---@return java_core.DapRunner
 function M:new(args)
 	local o = {
 		reporter = args.reporter,
@@ -19,7 +19,7 @@ function M:new(args)
 end
 
 ---Dap run with given config
----@param config JavaCoreDapLauncherConfig
+---@param config java_core.DapLauncherConfig
 function M:run_by_config(config)
 	log.debug('running dap with config: ', config)
 
@@ -36,8 +36,8 @@ end
 
 ---Runs before the dap run
 ---@private
----@param conf JavaCoreDapLauncherConfig
----@return JavaCoreDapLauncherConfig
+---@param conf java_core.DapLauncherConfig
+---@return java_core.DapLauncherConfig
 function M:before(conf)
 	log.debug('running "before" callback')
 
@@ -72,5 +72,5 @@ end
 
 return M
 
----@class JavaCoreDapRunReport
----@field get_stream_reader fun(self: JavaCoreDapRunReport, conn: uv_tcp_t): fun(err: string|nil, buffer: string|nil)
+---@class java_core.DapRunReport
+---@field get_stream_reader fun(self: java_core.DapRunReport, conn: uv_tcp_t): fun(err: string|nil, buffer: string|nil)

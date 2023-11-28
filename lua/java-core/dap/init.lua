@@ -44,7 +44,7 @@ function M:get_dap_adapter()
 end
 
 ---Returns the dap configuration for the current project
----@return JavaCoreDapLauncherConfig[] # dap configuration details
+---@return java_core.DapLauncherConfig[] # dap configuration details
 function M:get_dap_config()
 	log.info('creating dap configuration for java')
 
@@ -60,7 +60,7 @@ end
 
 ---Returns the dap config for the given main class
 ---@param main JavaDebugResolveMainClassRecord
----@return JavaCoreDapLauncherConfig # dap launch configuration record
+---@return java_core.DapLauncherConfig # dap launch configuration record
 function M:get_dap_config_record(main)
 	local classpaths =
 		self.java_debug:resolve_classpath(main.mainClass, main.projectName)
@@ -92,7 +92,7 @@ return M
 ---@field preLaunchTask? string
 ---@field postDebugTask? string
 
----@class JavaCoreDapLauncherConfig
+---@class java_core.DapLauncherConfig
 ---@field name string
 ---@field type string
 ---@field request string
