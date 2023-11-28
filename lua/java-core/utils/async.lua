@@ -38,7 +38,7 @@ local function async(func)
 					return
 				end
 
-				error('unhandled error ' .. thunk)
+				error('unhandled error ' .. tostring(thunk))
 			end
 
 			assert(ok, thunk)
