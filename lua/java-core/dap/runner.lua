@@ -1,15 +1,12 @@
 local log = require('java-core.utils.log')
 
 ---@class java_core.DapRunner
----@field reporter java_core.DapRunReport
 ---@field private server uv_tcp_t
 local M = {}
 
----@param args { reporter: java_core.DapRunReport }
 ---@return java_core.DapRunner
-function M:new(args)
+function M:new()
 	local o = {
-		reporter = args.reporter,
 		server = nil,
 	}
 
@@ -20,12 +17,13 @@ end
 
 ---Dap run with given config
 ---@param config java_core.DapLauncherConfig
-function M:run_by_config(config)
+---@param report java_test.JUnitTestReport
+function M:run_by_config(config, report)
 	log.debug('running dap with config: ', config)
 
 	require('dap').run(config --[[@as Configuration]], {
 		before = function(conf)
-			return self:before(conf)
+			return self:before(conf, report)
 		end,
 
 		after = function()
@@ -37,8 +35,9 @@ end
 ---Runs before the dap run
 ---@private
 ---@param conf java_core.DapLauncherConfig
+---@param report java_test.JUnitTestReport
 ---@return java_core.DapLauncherConfig
-function M:before(conf)
+function M:before(conf, report)
 	log.debug('running "before" callback')
 
 	self.server = assert(vim.loop.new_tcp(), 'uv.new_tcp() must return handle')
@@ -48,7 +47,7 @@ function M:before(conf)
 
 		local sock = assert(vim.loop.new_tcp(), 'uv.new_tcp must return handle')
 		self.server:accept(sock)
-		local success = sock:read_start(self.reporter:get_stream_reader(sock))
+		local success = sock:read_start(report:get_stream_reader(sock))
 		assert(success == 0, 'failed to listen to reader')
 	end)
 

@@ -56,9 +56,14 @@ end
 ---Runs the test class in the given buffer
 ---@param buffer integer
 ---@param config JavaCoreDapLauncherConfigOverridable
-function M:run_class_by_buffer(buffer, config)
+
+---comment
+---@param buffer number
+---@param report java_test.JUnitTestReport
+---@param config? JavaCoreDapLauncherConfigOverridable config to override the default values in test launcher config
+function M:run_class_by_buffer(buffer, report, config)
 	local tests = self:get_test_class_by_buffer(buffer)
-	self:run_test(tests, config)
+	self:run_test(tests, report, config)
 end
 
 ---Returns test classes in the given buffer
@@ -74,8 +79,9 @@ end
 
 ---Run the given test
 ---@param tests java_core.TestDetails[]
+---@param report java_test.JUnitTestReport
 ---@param config? JavaCoreDapLauncherConfigOverridable config to override the default values in test launcher config
-function M:run_test(tests, config)
+function M:run_test(tests, report, config)
 	local launch_args = self.test_client:resolve_junit_launch_arguments(
 		data_adapters.get_junit_launch_argument_params(tests)
 	)
@@ -94,7 +100,7 @@ function M:run_test(tests, config)
 	dap_launcher_config =
 		vim.tbl_deep_extend('force', dap_launcher_config, config or {})
 
-	self.runner:run_by_config(dap_launcher_config)
+	self.runner:run_by_config(dap_launcher_config, report)
 end
 
 return M
