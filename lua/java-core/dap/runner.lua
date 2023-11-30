@@ -1,15 +1,12 @@
 local log = require('java-core.utils.log')
 
----@class JavaCoreDapRunner
----@field reporter JavaCoreDapRunReport
+---@class java_core.DapRunner
 ---@field private server uv_tcp_t
 local M = {}
 
----@param args { reporter: JavaCoreDapRunReport }
----@return JavaCoreDapRunner
-function M:new(args)
+---@return java_core.DapRunner
+function M:new()
 	local o = {
-		reporter = args.reporter,
 		server = nil,
 	}
 
@@ -19,13 +16,14 @@ function M:new(args)
 end
 
 ---Dap run with given config
----@param config JavaCoreDapLauncherConfig
-function M:run_by_config(config)
+---@param config java_core.DapLauncherConfig
+---@param report java_test.JUnitTestReport
+function M:run_by_config(config, report)
 	log.debug('running dap with config: ', config)
 
 	require('dap').run(config --[[@as Configuration]], {
 		before = function(conf)
-			return self:before(conf)
+			return self:before(conf, report)
 		end,
 
 		after = function()
@@ -36,9 +34,10 @@ end
 
 ---Runs before the dap run
 ---@private
----@param conf JavaCoreDapLauncherConfig
----@return JavaCoreDapLauncherConfig
-function M:before(conf)
+---@param conf java_core.DapLauncherConfig
+---@param report java_test.JUnitTestReport
+---@return java_core.DapLauncherConfig
+function M:before(conf, report)
 	log.debug('running "before" callback')
 
 	self.server = assert(vim.loop.new_tcp(), 'uv.new_tcp() must return handle')
@@ -48,7 +47,7 @@ function M:before(conf)
 
 		local sock = assert(vim.loop.new_tcp(), 'uv.new_tcp must return handle')
 		self.server:accept(sock)
-		local success = sock:read_start(self.reporter:get_stream_reader(sock))
+		local success = sock:read_start(report:get_stream_reader(sock))
 		assert(success == 0, 'failed to listen to reader')
 	end)
 
@@ -72,5 +71,5 @@ end
 
 return M
 
----@class JavaCoreDapRunReport
----@field get_stream_reader fun(self: JavaCoreDapRunReport, conn: uv_tcp_t): fun(err: string|nil, buffer: string|nil)
+---@class java_core.DapRunReport
+---@field get_stream_reader fun(self: java_core.DapRunReport, conn: uv_tcp_t): fun(err: string|nil, buffer: string|nil)

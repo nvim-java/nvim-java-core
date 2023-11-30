@@ -1,5 +1,3 @@
-local jdtls_types = require('java-core.ls.servers.jdtls.jdtls-types')
-
 local List = require('java-core.utils.list')
 local Set = require('java-core.utils.set')
 local JavaTestClient = require('java-core.ls.clients.java-test-client')
@@ -10,7 +8,7 @@ local M = {}
 ---@param launch_args JavaCoreTestJunitLaunchArguments
 ---@param java_exec string
 ---@param config { debug: boolean, label: string }
----@return JavaCoreDapLauncherConfig
+---@return java_core.DapLauncherConfig
 function M.get_dap_launcher_config(launch_args, java_exec, config)
 	return {
 		name = config.label,
