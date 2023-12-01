@@ -6,5 +6,6 @@
 ![Gradle](https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white)
 ![Apache Maven](https://img.shields.io/badge/Apache%20Maven-C71A36?style=for-the-badge&logo=Apache%20Maven&logoColor=white)
 
-This is a sub project of [nvim-java](https://github.com/nvim-java/nvim-java). Please refer the
-[README](https://github.com/nvim-java/nvim-java) in the main repository.
+This project includes anything and everything to do with communicating to jdtls
+
+## Head on to main project [:coffee: nvim-java](https://github.com/nvim-java/nvim-java)
