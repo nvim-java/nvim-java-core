@@ -1,32 +1,26 @@
 local log = require('java-core.utils.log')
 local data_adapters = require('java-core.adapters')
 
-local JavaDebug = require('java-core.ls.clients.java-debug-client')
-local JavaTest = require('java-core.ls.clients.java-test-client')
+local DebugClient = require('java-core.ls.clients.java-debug-client')
+local TestClient = require('java-core.ls.clients.java-test-client')
 
 ---@class java_core.TestApi
----@field private client java_core.JdtlsClient
----@field private debug_client JavaCoreDebugClient
----@field private test_client java_core.TestClient
----@field private runner java_core.DapRunner
+---@field private client java-core.JdtlsClient
+---@field private debug_client java-core.DebugClient
+---@field private test_client java-core.TestClient
+---@field private runner java-dap.DapRunner
 local M = {}
 
 ---Returns a new test helper client
----@param args { client: LspClient, runner: java_core.DapRunner }
+---@param args { client: LspClient, runner: java-dap.DapRunner }
 ---@return java_core.TestApi
 function M:new(args)
 	local o = {
 		client = args.client,
 	}
 
-	o.debug_client = JavaDebug:new({
-		client = args.client,
-	})
-
-	o.test_client = JavaTest:new({
-		client = args.client,
-	})
-
+	o.debug_client = DebugClient(args.client)
+	o.test_client = TestClient(args.client)
 	o.runner = args.runner
 
 	setmetatable(o, self)
@@ -37,7 +31,7 @@ end
 
 ---Returns a list of test methods
 ---@param file_uri string uri of the class
----@return java_core.TestDetailsWithRange[] # list of test methods
+---@return java-core.TestDetailsWithRange[] # list of test methods
 function M:get_test_methods(file_uri)
 	local classes = self.test_client:find_test_types_and_methods(file_uri)
 	local methods = {}
@@ -53,14 +47,10 @@ function M:get_test_methods(file_uri)
 	return methods
 end
 
----Runs the test class in the given buffer
----@param buffer integer
----@param config JavaCoreDapLauncherConfigOverridable
-
 ---comment
 ---@param buffer number
 ---@param report java_test.JUnitTestReport
----@param config? JavaCoreDapLauncherConfigOverridable config to override the default values in test launcher config
+---@param config? java-dap.DapLauncherConfigOverridable config to override the default values in test launcher config
 function M:run_class_by_buffer(buffer, report, config)
 	local tests = self:get_test_class_by_buffer(buffer)
 	self:run_test(tests, report, config)
@@ -69,7 +59,7 @@ end
 ---Returns test classes in the given buffer
 ---@priate
 ---@param buffer integer
----@return java_core.TestDetailsWithChildrenAndRange # get test class details
+---@return java-core.TestDetailsWithChildrenAndRange # get test class details
 function M:get_test_class_by_buffer(buffer)
 	log.debug('finding test class by buffer')
 
@@ -78,9 +68,9 @@ function M:get_test_class_by_buffer(buffer)
 end
 
 ---Run the given test
----@param tests java_core.TestDetails[]
+---@param tests java-core.TestDetails[]
 ---@param report java_test.JUnitTestReport
----@param config? JavaCoreDapLauncherConfigOverridable config to override the default values in test launcher config
+---@param config? java-dap.DapLauncherConfigOverridable config to override the default values in test launcher config
 function M:run_test(tests, report, config)
 	local launch_args = self.test_client:resolve_junit_launch_arguments(
 		data_adapters.get_junit_launch_argument_params(tests)

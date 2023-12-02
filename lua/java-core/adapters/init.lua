@@ -8,7 +8,7 @@ local M = {}
 ---@param launch_args JavaCoreTestJunitLaunchArguments
 ---@param java_exec string
 ---@param config { debug: boolean, label: string }
----@return java_core.DapLauncherConfig
+---@return java-core.DapLauncherConfig
 function M.get_dap_launcher_config(launch_args, java_exec, config)
 	return {
 		name = config.label,
