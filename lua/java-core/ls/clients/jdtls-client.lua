@@ -1,14 +1,19 @@
 local log = require('java-core.utils.log')
+local class = require('java-core.utils.class')
 local async = require('java-core.utils.async')
 local await = async.wait_handle_error
 
----@class java_core.JdtlsClient
+---@class java-core.JdtlsClient
 ---@field client LspClient
-local M = {}
+local JdtlsClient = class()
+
+function JdtlsClient:_init(client)
+	self.client = client
+end
 
 ---@param args? { client: LspClient }
----@return java_core.JdtlsClient
-function M:new(args)
+---@return java-core.JdtlsClient
+function JdtlsClient:new(args)
 	local o = {
 		client = (args or {}).client,
 	}
@@ -23,7 +28,7 @@ end
 ---@param arguments? string | string[]
 ---@param buffer? integer
 ---@return any
-function M:execute_command(command, arguments, buffer)
+function JdtlsClient:execute_command(command, arguments, buffer)
 	log.debug('executing: workspace/executeCommand - ' .. command)
 
 	local cmd_info = {
@@ -54,11 +59,11 @@ end
 ---Returns the decompiled class file content
 ---@param uri string uri of the class file
 ---@return string # decompiled file content
-function M:java_decompile(uri)
+function JdtlsClient:java_decompile(uri)
 	return self:execute_command('java.decompile', { uri })
 end
 
-function M:get_capability(...)
+function JdtlsClient:get_capability(...)
 	local capability = self.client.server_capabilities
 
 	for _, value in ipairs({ ... }) do
@@ -76,7 +81,7 @@ end
 ---Returns true if the LS supports the given command
 ---@param command_name string name of the command
 ---@return boolean # true if the command is supported
-function M:has_command(command_name)
+function JdtlsClient:has_command(command_name)
 	local commands = self:get_capability('executeCommandProvider', 'commands')
 
 	if not commands then
@@ -86,4 +91,4 @@ function M:has_command(command_name)
 	return vim.tbl_contains(commands, command_name)
 end
 
-return M
+return JdtlsClient

@@ -1,7 +1,13 @@
+local class = require('java-core.utils.class')
+
 local JdtlsClient = require('java-core.ls.clients.jdtls-client')
 
----@class JavaCoreDebugClient: java_core.JdtlsClient
-local M = JdtlsClient:new()
+---@class java-core.DebugClient: java-core.JdtlsClient
+local DebugClient = class(JdtlsClient)
+
+function DebugClient:_init(client)
+	self:super(client)
+end
 
 ---@class JavaDebugResolveMainClassRecord
 ---@field mainClass string
@@ -10,7 +16,7 @@ local M = JdtlsClient:new()
 
 ---Returns a list of main classes in the current workspace
 ---@return JavaDebugResolveMainClassRecord[] # resolved main class
-function M:resolve_main_class()
+function DebugClient:resolve_main_class()
 	return self:execute_command('vscode.java.resolveMainClass')
 end
 
@@ -18,7 +24,7 @@ end
 ---@param project_name string
 ---@param main_class string
 ---@return string[][] # resolved class and module paths
-function M:resolve_classpath(main_class, project_name)
+function DebugClient:resolve_classpath(main_class, project_name)
 	return self:execute_command(
 		'vscode.java.resolveClasspath',
 		{ main_class, project_name }
@@ -29,7 +35,7 @@ end
 ---@param project_name string
 ---@param main_class string
 ---@return string # path to java executable
-function M:resolve_java_executable(main_class, project_name)
+function DebugClient:resolve_java_executable(main_class, project_name)
 	return self:execute_command('vscode.java.resolveJavaExecutable', {
 		main_class,
 		project_name,
@@ -42,7 +48,7 @@ end
 ---@param inheritedOptions boolean
 ---@param expectedOptions { [string]: any }
 ---@return boolean # true if the setting is the expected setting
-function M:check_project_settings(
+function DebugClient:check_project_settings(
 	main_class,
 	project_name,
 	inheritedOptions,
@@ -61,12 +67,12 @@ end
 
 ---Starts a debug session and returns the port number
 ---@return integer # port number of the debug session
-function M:start_debug_session()
+function DebugClient:start_debug_session()
 	return self:execute_command('vscode.java.startDebugSession')
 end
 
 ---@enum CompileWorkspaceStatus
-M.CompileWorkspaceStatus = {
+DebugClient.CompileWorkspaceStatus = {
 	FAILED = 0,
 	SUCCEED = 1,
 	WITHERROR = 2,
@@ -79,7 +85,12 @@ M.CompileWorkspaceStatus = {
 ---@param file_path? string
 ---@param is_full_build boolean
 ---@return CompileWorkspaceStatus # compiled status
-function M:build_workspace(main_class, project_name, file_path, is_full_build)
+function DebugClient:build_workspace(
+	main_class,
+	project_name,
+	file_path,
+	is_full_build
+)
 	return self:execute_command(
 		'vscode.java.buildWorkspace',
 		vim.fn.json_encode({
@@ -91,4 +102,4 @@ function M:build_workspace(main_class, project_name, file_path, is_full_build)
 	)
 end
 
-return M
+return DebugClient

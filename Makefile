@@ -1,5 +1,5 @@
-PREPARE_CONFIG=tests/prepare_config.lua
-TEST_CONFIG=tests/test_config.lua
+PREPARE_CONFIG=tests/prepare-config.lua
+TEST_CONFIG=tests/test-config.lua
 TESTS_DIR=tests/
 
 .PHONY: test

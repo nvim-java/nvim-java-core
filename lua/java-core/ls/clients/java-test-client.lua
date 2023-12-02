@@ -1,7 +1,9 @@
 local log = require('java-core.utils.log')
+local class = require('java-core.utils.class')
+
 local JdtlsClient = require('java-core.ls.clients.jdtls-client')
 
----@class java_core.TestDetails: Configuration
+---@class java-core.TestDetails: Configuration
 ---@field fullName string
 ---@field id string
 ---@field jdtHandler string
@@ -11,17 +13,17 @@ local JdtlsClient = require('java-core.ls.clients.jdtls-client')
 ---@field testLevel integer
 ---@field uri string
 
----@class java_core.TestDetailsWithRange: java_core.TestDetails
----@field range java_core.TestRange
+---@class java-core.TestDetailsWithRange: java-core.TestDetails
+---@field range java-core.TestRange
 
----@class java_core.TestDetailsWithChildren: java_core.TestDetails
----@field children java_core.TestDetailsWithRange[]
+---@class java-core.TestDetailsWithChildren: java-core.TestDetails
+---@field children java-core.TestDetailsWithRange[]
 
----@class java_core.TestDetailsWithChildrenAndRange: java_core.TestDetails
----@field range java_core.TestRange
----@field children java_core.TestDetailsWithRange[]
+---@class java-core.TestDetailsWithChildrenAndRange: java-core.TestDetails
+---@field range java-core.TestRange
+---@field children java-core.TestDetailsWithRange[]
 
----@class java_core.TestRange
+---@class java-core.TestRange
 ---@field start CursorPoint
 ---@field end CursorPoint
 
@@ -29,12 +31,16 @@ local JdtlsClient = require('java-core.ls.clients.jdtls-client')
 ---@field line integer
 ---@field character integer
 
----@class java_core.TestClient: java_core.JdtlsClient
-local M = JdtlsClient:new()
+---@class java-core.TestClient: java-core.JdtlsClient
+local TestClient = class(JdtlsClient)
+
+function TestClient:_init(client)
+	self:super(client)
+end
 
 ---Returns a list of project details in the current root
----@return java_core.TestDetails[] # test details of the projects
-function M:find_java_projects()
+---@return java-core.TestDetails[] # test details of the projects
+function TestClient:find_java_projects()
 	return self:execute_command(
 		'vscode.java.test.findJavaProjects',
 		{ vim.uri_from_fname(self.client.config.root_dir) }
@@ -44,8 +50,8 @@ end
 ---Returns a list of test package details
 ---@param handler string
 ---@param token? string
----@return java_core.TestDetailsWithChildren[] # test package details
-function M:find_test_packages_and_types(handler, token)
+---@return java-core.TestDetailsWithChildren[] # test package details
+function TestClient:find_test_packages_and_types(handler, token)
 	return self:execute_command(
 		'vscode.java.test.findTestPackagesAndTypes',
 		{ handler, token }
@@ -55,8 +61,8 @@ end
 ---Returns test informations in a given file
 ---@param file_uri string
 ---@param token? string
----@return java_core.TestDetailsWithChildrenAndRange[] # test details
-function M:find_test_types_and_methods(file_uri, token)
+---@return java-core.TestDetailsWithChildrenAndRange[] # test details
+function TestClient:find_test_types_and_methods(file_uri, token)
 	return self:execute_command(
 		'vscode.java.test.findTestTypesAndMethods',
 		{ file_uri, token }
@@ -75,13 +81,13 @@ end
 ---@class JavaCoreTestResolveJUnitLaunchArgumentsParams
 ---@field project_name string
 ---@field test_names string[]
----@field test_level java_core.TestLevel
----@field test_kind java_core.TestKind
+---@field test_level java-core.TestLevel
+---@field test_kind java-core.TestKind
 
 ---Returns junit launch arguments
 ---@param args JavaCoreTestResolveJUnitLaunchArgumentsParams
 ---@return JavaCoreTestJunitLaunchArguments # junit launch arguments
-function M:resolve_junit_launch_arguments(args)
+function TestClient:resolve_junit_launch_arguments(args)
 	local launch_args = self:execute_command(
 		'vscode.java.test.junit.argument',
 		vim.fn.json_encode(args)
@@ -97,16 +103,16 @@ function M:resolve_junit_launch_arguments(args)
 	return launch_args.body
 end
 
----@enum java_core.TestKind
-M.TestKind = {
+---@enum java-core.TestKind
+TestClient.TestKind = {
 	JUnit5 = 0,
 	JUnit = 1,
 	TestNG = 2,
 	None = 100,
 }
 
----@enum java_core.TestLevel
-M.TestLevel = {
+---@enum java-core.TestLevel
+TestClient.TestLevel = {
 	Root = 0,
 	Workspace = 1,
 	WorkspaceFolder = 2,
@@ -117,4 +123,4 @@ M.TestLevel = {
 	Invocation = 7,
 }
 
-return M
+return TestClient
