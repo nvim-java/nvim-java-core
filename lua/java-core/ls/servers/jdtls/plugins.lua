@@ -9,6 +9,7 @@ local M = {}
 local plugin_to_jar_path_map = {
 	['java-test'] = '*.jar',
 	['java-debug-adapter'] = '*.jar',
+	['sts4'] = '{jdt-ls*.jar,io*.jar,org*.jar}',
 }
 
 ---Returns a list of .jar file paths for given list of jdtls plugins
