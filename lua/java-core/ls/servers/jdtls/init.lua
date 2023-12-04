@@ -1,6 +1,7 @@
 local config = require('java-core.ls.servers.jdtls.config')
 local log = require('java-core.utils.log')
 local mason = require('java-core.utils.mason')
+local mason_reg = require('mason-registry')
 local path = require('java-core.utils.path')
 local plugins = require('java-core.ls.servers.jdtls.plugins')
 local util = require('lspconfig.util')
@@ -13,6 +14,7 @@ local M = {}
 ---Ex:- { 'pom.xml', 'build.gradle', '.git' }
 ---@field jdtls_plugins string[] list of jdtls plugins to load on start up
 ---Ex:- { 'java-test', 'java-debug-adapter' }
+---@field use_mason_jdk boolean whether to use mason jdk to load jdtls or not
 
 ---Returns a configuration for jdtls that you can pass into the setup of nvim-lspconfig
 ---@param opts JavaCoreGetConfigOptions
@@ -35,6 +37,21 @@ function M.get_config(opts)
 		workspace.get_default_workspace(),
 		'-javaagent:' .. lombok_path,
 	}
+
+	if opts.use_mason_jdk then
+		local jdk = mason_reg.get_package('openjdk-17')
+
+		if jdk:is_installed() then
+			local java_home =
+				vim.fn.glob(path.join(jdk:get_install_path(), '/jdk-17*'))
+			local java_bin = path.join(java_home, '/bin')
+
+			base_config.cmd_env = {
+				['PATH'] = vim.fn.getenv('PATH') .. ':' .. java_bin,
+				['JAVA_HOME'] = java_home,
+			}
+		end
+	end
 
 	base_config.root_dir = M.get_root_finder(opts.root_markers)
 	base_config.init_options.bundles = plugin_paths
