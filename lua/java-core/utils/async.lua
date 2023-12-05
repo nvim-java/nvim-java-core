@@ -116,6 +116,16 @@ local await_handle_error = function(defer)
 	return value
 end
 
+local await_handle_ok = function(defer)
+	local ok, value = co.yield(defer)
+
+	if not ok then
+		error(value)
+	end
+
+	return value
+end
+
 local await_all = function(defer)
 	assert(type(defer) == 'table', 'type error :: expected table')
 	return co.yield(join(defer))
@@ -124,6 +134,7 @@ end
 return {
 	sync = async,
 	wait_handle_error = await_handle_error,
+	wait_handle_ok = await_handle_ok,
 	wait = await,
 	wait_all = await_all,
 	wrap = wrap,
