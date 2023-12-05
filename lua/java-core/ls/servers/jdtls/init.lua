@@ -22,19 +22,46 @@ local M = {}
 function M.get_config(opts)
 	log.debug('generating jdtls config')
 
-	local jdtls_path = mason.get_pkg_path('jdtls')
-	local lombok_path = path.join(jdtls_path, 'lombok.jar')
-	local jdtls_cache_path = path.join(vim.fn.stdpath('cache'), 'jdtls')
+	-- this is the configuration found in the jdtls package. Here, I don't have to
+	-- pick the OS at runtime because mason.nvim does that for me at the
+	-- installation
+	local jdtls_root = mason.get_shared_path('jdtls')
+	local jdtls_config = path.join(jdtls_root, 'config')
+	local lombok_path = path.join(jdtls_root, 'lombok.jar')
+	local equinox_launcher =
+		path.join(jdtls_root, 'plugins', 'org.eclipse.equinox.launcher.jar')
 	local plugin_paths = plugins.get_plugin_paths(opts.jdtls_plugins)
+	local jdtls_cache_path = path.join(vim.fn.stdpath('cache'), 'jdtls')
 
 	local base_config = config.get_config()
 
 	base_config.cmd = {
-		'jdtls',
+		'java',
+		'-Declipse.application=org.eclipse.jdt.ls.core.id1',
+		'-Dosgi.bundles.defaultStartLevel=4',
+		'-Declipse.product=org.eclipse.jdt.ls.core.product',
+		'-Dosgi.checkConfiguration=true',
+		'-Dosgi.sharedConfiguration.area=' .. jdtls_config,
+		'-Dosgi.sharedConfiguration.area.readOnly=true',
+		'-Dosgi.configuration.cascaded=true',
+		'-Xms1G',
+		'--add-modules=ALL-SYSTEM',
+
+		'--add-opens',
+		'java.base/java.util=ALL-UNNAMED',
+
+		'--add-opens',
+		'java.base/java.lang=ALL-UNNAMED',
+
+		'-jar',
+		equinox_launcher,
+
 		'-configuration',
 		jdtls_cache_path,
+
 		'-data',
 		workspace.get_default_workspace(),
+
 		'-javaagent:' .. lombok_path,
 	}
 
