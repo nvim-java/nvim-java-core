@@ -60,8 +60,8 @@ local function async(func)
 		end,
 		__index = function(this, key)
 			if key == 'catch' then
-				return function(_error_handler)
-					error_handler = _error_handler
+				return function(loc_error_handler)
+					error_handler = loc_error_handler
 					return this
 				end
 			end
