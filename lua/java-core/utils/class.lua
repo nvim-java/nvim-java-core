@@ -34,8 +34,8 @@ local function call_ctor(c, obj, ...)
 			parent_with_init = rawget(parent_with_init, '_parent_with_init')
 		end
 		if parent_with_init then -- super() points to one above whereever _init came from
-			rawset(obj, 'super', function(obj, ...)
-				call_ctor(parent_with_init, obj, ...)
+			rawset(obj, 'super', function(loc_obj, ...)
+				call_ctor(parent_with_init, loc_obj, ...)
 			end)
 		end
 	else
@@ -180,7 +180,7 @@ local function _class(base, c_arg, c)
 	end
 
 	-- expose a ctor which can be called by <classname>(<args>)
-	mt.__call = function(class_tbl, ...)
+	mt.__call = function(_class_tbl, ...)
 		local obj
 		if rawget(c, '_create') then
 			obj = c._create(...)
@@ -237,10 +237,10 @@ end
 -- @param c optional table to be used as class
 local class
 class = setmetatable({}, {
-	__call = function(fun, ...)
+	__call = function(_fun, ...)
 		return _class(...)
 	end,
-	__index = function(tbl, key)
+	__index = function(_tbl, key)
 		if key == 'class' then
 			io.stderr:write(
 				'require("pl.class").class is deprecated. Use require("pl.class")\n'
