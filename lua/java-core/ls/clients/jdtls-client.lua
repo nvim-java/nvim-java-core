@@ -5,6 +5,7 @@ local await = async.wait_handle_error
 
 ---@class java-core.JdtlsClient
 ---@field client LspClient
+---@overload fun(client: LspClient): java-core.JdtlsClient
 local JdtlsClient = class()
 
 function JdtlsClient:_init(client)
@@ -89,6 +90,12 @@ function JdtlsClient:has_command(command_name)
 	end
 
 	return vim.tbl_contains(commands, command_name)
+end
+
+---Sends a configuration change notification to jdtls
+---@param config LspSetupConfig
+function JdtlsClient:did_change_configuration(config)
+	self.client.notify('workspace/didChangeConfiguration', config)
 end
 
 return JdtlsClient
