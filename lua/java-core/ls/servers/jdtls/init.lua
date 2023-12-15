@@ -53,6 +53,8 @@ function M.get_config(opts)
 		'--add-opens',
 		'java.base/java.lang=ALL-UNNAMED',
 
+		'-javaagent:' .. lombok_path,
+
 		'-jar',
 		equinox_launcher,
 
@@ -61,8 +63,6 @@ function M.get_config(opts)
 
 		'-data',
 		workspace.get_default_workspace(),
-
-		'-javaagent:' .. lombok_path,
 	}
 
 	if opts.use_mason_jdk then
