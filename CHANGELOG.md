@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/nvim-java/nvim-java-core/compare/v1.0.0...v1.0.1) (2023-12-15)
+
+
+### Bug Fixes
+
+* lombok is not working ([#48](https://github.com/nvim-java/nvim-java-core/issues/48)) ([9538926](https://github.com/nvim-java/nvim-java-core/commit/9538926d14396eede8fc0d625761c9ed659c96df))
+
 ## 1.0.0 (2023-12-10)
 
 
