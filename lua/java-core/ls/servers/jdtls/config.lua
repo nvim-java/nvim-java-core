@@ -22,15 +22,6 @@ function M.get_config()
 				},
 			},
 		},
-
-		handlers = {
-			--@TODO
-			--overriding '$/progress' is necessary because by default it's using the
-			--lspconfig progress handler which prints the wrong value in the latest
-			--jdtls version (tested on 1.29.0).
-			--https://github.com/neovim/nvim-lspconfig/issues/2897
-			['$/progress'] = vim.lsp.handlers['$/progress'],
-		},
 	}
 end
 
