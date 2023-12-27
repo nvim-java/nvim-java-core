@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/nvim-java/nvim-java-core/compare/v1.0.1...v1.0.2) (2023-12-27)
+
+
+### Bug Fixes
+
+* trying to load jar that's not a jdtls extension ([#56](https://github.com/nvim-java/nvim-java-core/issues/56)) ([2951613](https://github.com/nvim-java/nvim-java-core/commit/295161308d57cc4c7a69daeeee6951e74080c661))
+
 ## [1.0.1](https://github.com/nvim-java/nvim-java-core/compare/v1.0.0...v1.0.1) (2023-12-15)
 
 
