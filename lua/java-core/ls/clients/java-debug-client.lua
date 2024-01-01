@@ -12,7 +12,7 @@ end
 ---@class JavaDebugResolveMainClassRecord
 ---@field mainClass string
 ---@field projectName string
----@field fileName string
+---@field filePath string
 
 ---Returns a list of main classes in the current workspace
 ---@return JavaDebugResolveMainClassRecord[] # resolved main class
