@@ -26,7 +26,7 @@ function M.get_config(opts)
 	-- pick the OS at runtime because mason.nvim does that for me at the
 	-- installation
 	local jdtls_root = mason.get_shared_path('jdtls')
-	local lombok_root = mason.get_shared_path('lombok')
+	local lombok_root = mason.get_shared_path('lombok-nightly')
 
 	local jdtls_config = path.join(jdtls_root, 'config')
 	local lombok_path = path.join(lombok_root, 'lombok.jar')
