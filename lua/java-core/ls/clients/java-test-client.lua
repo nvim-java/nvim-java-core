@@ -24,12 +24,8 @@ local JdtlsClient = require('java-core.ls.clients.jdtls-client')
 ---@field children java-core.TestDetailsWithRange[]
 
 ---@class java-core.TestRange
----@field start CursorPoint
----@field end CursorPoint
-
----@class CursorPoint
----@field line integer
----@field character integer
+---@field start nvim.CursorPoint
+---@field end nvim.CursorPoint
 
 ---@class java-core.TestClient: java-core.JdtlsClient
 local TestClient = class(JdtlsClient)
