@@ -24,12 +24,8 @@ local JdtlsClient = require('java-core.ls.clients.jdtls-client')
 ---@field children java-core.TestDetailsWithRange[]
 
 ---@class java-core.TestRange
----@field start CursorPoint
----@field end CursorPoint
-
----@class CursorPoint
----@field line integer
----@field character integer
+---@field start nvim.CursorPoint
+---@field end nvim.CursorPoint
 
 ---@class java-core.TestClient: java-core.JdtlsClient
 local TestClient = class(JdtlsClient)
@@ -41,7 +37,7 @@ end
 ---Returns a list of project details in the current root
 ---@return java-core.TestDetails[] # test details of the projects
 function TestClient:find_java_projects()
-	return self:execute_command(
+	return self:workspace_execute_command(
 		'vscode.java.test.findJavaProjects',
 		{ vim.uri_from_fname(self.client.config.root_dir) }
 	)
@@ -52,7 +48,7 @@ end
 ---@param token? string
 ---@return java-core.TestDetailsWithChildren[] # test package details
 function TestClient:find_test_packages_and_types(handler, token)
-	return self:execute_command(
+	return self:workspace_execute_command(
 		'vscode.java.test.findTestPackagesAndTypes',
 		{ handler, token }
 	)
@@ -63,7 +59,7 @@ end
 ---@param token? string
 ---@return java-core.TestDetailsWithChildrenAndRange[] # test details
 function TestClient:find_test_types_and_methods(file_uri, token)
-	return self:execute_command(
+	return self:workspace_execute_command(
 		'vscode.java.test.findTestTypesAndMethods',
 		{ file_uri, token }
 	)
@@ -88,7 +84,7 @@ end
 ---@param args JavaCoreTestResolveJUnitLaunchArgumentsParams
 ---@return JavaCoreTestJunitLaunchArguments # junit launch arguments
 function TestClient:resolve_junit_launch_arguments(args)
-	local launch_args = self:execute_command(
+	local launch_args = self:workspace_execute_command(
 		'vscode.java.test.junit.argument',
 		vim.fn.json_encode(args)
 	)

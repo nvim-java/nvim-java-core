@@ -17,7 +17,7 @@ end
 ---Returns a list of main classes in the current workspace
 ---@return JavaDebugResolveMainClassRecord[] # resolved main class
 function DebugClient:resolve_main_class()
-	return self:execute_command('vscode.java.resolveMainClass')
+	return self:workspace_execute_command('vscode.java.resolveMainClass')
 end
 
 ---Returns module paths and class paths of a given main class
@@ -25,7 +25,7 @@ end
 ---@param main_class string
 ---@return string[][] # resolved class and module paths
 function DebugClient:resolve_classpath(main_class, project_name)
-	return self:execute_command(
+	return self:workspace_execute_command(
 		'vscode.java.resolveClasspath',
 		{ main_class, project_name }
 	)
@@ -36,7 +36,7 @@ end
 ---@param main_class string
 ---@return string # path to java executable
 function DebugClient:resolve_java_executable(main_class, project_name)
-	return self:execute_command('vscode.java.resolveJavaExecutable', {
+	return self:workspace_execute_command('vscode.java.resolveJavaExecutable', {
 		main_class,
 		project_name,
 	})
@@ -54,7 +54,7 @@ function DebugClient:check_project_settings(
 	inheritedOptions,
 	expectedOptions
 )
-	return self:execute_command(
+	return self:workspace_execute_command(
 		'vscode.java.checkProjectSettings',
 		vim.fn.json_encode({
 			className = main_class,
@@ -68,7 +68,7 @@ end
 ---Starts a debug session and returns the port number
 ---@return integer # port number of the debug session
 function DebugClient:start_debug_session()
-	return self:execute_command('vscode.java.startDebugSession')
+	return self:workspace_execute_command('vscode.java.startDebugSession')
 end
 
 ---@enum CompileWorkspaceStatus
@@ -91,7 +91,7 @@ function DebugClient:build_workspace(
 	file_path,
 	is_full_build
 )
-	return self:execute_command(
+	return self:workspace_execute_command(
 		'vscode.java.buildWorkspace',
 		vim.fn.json_encode({
 			mainClass = main_class,
