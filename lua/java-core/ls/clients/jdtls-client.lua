@@ -3,6 +3,37 @@ local class = require('java-core.utils.class')
 local async = require('java-core.utils.async')
 local await = async.wait_handle_error
 
+---@alias jdtls.RequestMethod
+---| 'workspace/executeCommand'
+---| 'java/inferSelection'
+---| 'java/getRefactorEdit'
+
+---@alias jdtls.CodeActionCommand
+---| 'extractVariable'
+---| 'assignVariable'
+---| 'extractVariableAllOccurrence'
+---| 'extractConstant'
+---| 'extractMethod'
+---| 'extractField'
+---| 'extractInterface'
+---| 'changeSignature'
+---| 'assignField'
+---| 'convertVariableToField'
+---| 'invertVariable'
+---| 'introduceParameter'
+---| 'convertAnonymousClassToNestedCommand') {
+
+---@class jdtls.RefactorWorkspaceEdit
+---@field edit lsp.WorkspaceEdit
+---@field command? lsp.Command
+---@field errorMessage? string
+
+---@class jdtls.SelectionInfo
+---@field name string
+---@field length number
+---@field offset number
+---@field params? string[]
+
 ---@class java-core.JdtlsClient
 ---@field client LspClient
 local JdtlsClient = class()
@@ -23,44 +54,82 @@ function JdtlsClient:new(args)
 	return o
 end
 
----Executes a workspace/executeCommand and returns the result
----@param command string
----@param arguments? string | string[]
----@param buffer? integer
----@return any
-function JdtlsClient:execute_command(command, arguments, buffer)
-	log.debug('executing: workspace/executeCommand - ' .. command)
-
-	local cmd_info = {
-		command = command,
-		arguments = arguments,
-	}
+---Sends a LSP request
+---@param method jdtls.RequestMethod
+---@param params lsp.ExecuteCommandParams
+---@param buffer? number
+function JdtlsClient:request(method, params, buffer)
+	log.debug('sending LSP request: ' .. method)
 
 	return await(function(callback)
 		local on_response = function(err, result)
 			if err then
-				log.error(command .. ' failed! arguments: ', arguments, ' error: ', err)
+				log.error(method .. ' failed! arguments: ', params, ' error: ', err)
 			else
-				log.debug(command .. ' success! response: ', result)
+				log.debug(method .. ' success! response: ', result)
 			end
 
 			callback(err, result)
 		end
 
-		return self.client.request(
-			'workspace/executeCommand',
-			cmd_info,
-			on_response,
-			buffer
-		)
+		return self.client.request(method, params, on_response, buffer)
 	end)
+end
+
+---Executes a workspace/executeCommand and returns the result
+---@param command string workspace command to execute
+---@param params? lsp.LSPAny[]
+---@param buffer? integer
+---@return lsp.LSPAny
+function JdtlsClient:workspace_execute_command(command, params, buffer)
+	return self:request('workspace/executeCommand', {
+		command = command,
+		arguments = params,
+	}, buffer)
+end
+
+---Returns more information about the object the cursor is on
+---@param command jdtls.RequestMethod
+---@param params lsp.CodeActionParams
+---@param buffer? number
+---@return jdtls.SelectionInfo[]
+function JdtlsClient:java_infer_selection(command, params, buffer)
+	return self:request('java/inferSelection', {
+		command = command,
+		context = params,
+	}, buffer)
+end
+
+---Returns refactor details
+---@param command jdtls.CodeActionCommand
+---@param context lsp.CodeActionParams
+---@param options lsp.FormattingOptions
+---@param command_arguments jdtls.SelectionInfo[];
+---@param buffer? number
+---@return jdtls.RefactorWorkspaceEdit
+function JdtlsClient:java_get_refactor_edit(
+	command,
+	context,
+	options,
+	command_arguments,
+	buffer
+)
+	local params = {
+		command = command,
+		context = context,
+		options = options,
+		commandArguments = command_arguments,
+	}
+
+	return self:request('java/getRefactorEdit', params, buffer)
 end
 
 ---Returns the decompiled class file content
 ---@param uri string uri of the class file
 ---@return string # decompiled file content
 function JdtlsClient:java_decompile(uri)
-	return self:execute_command('java.decompile', { uri })
+	---@type string
+	return self:workspace_execute_command('java.decompile', { uri })
 end
 
 function JdtlsClient:get_capability(...)

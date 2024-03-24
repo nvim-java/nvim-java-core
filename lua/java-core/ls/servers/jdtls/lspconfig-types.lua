@@ -29,10 +29,6 @@
 ---`workspace/didChangeConfiguration` notification from the Nvim client to the language server.
 ---These settings allow a user to change optional runtime settings of the language server.
 
----@class LspClientRequestParameters
----@field command string
----@field arguments string | string[] | nil
-
 ---@class LspClientResponse
 ---@field err LspClientResponseError
 
@@ -55,7 +51,7 @@
 ---@field name string
 ---@field notify fun(method: string, params: object): boolean
 ---@field offset_encoding string
----@field request fun(method:string,params:LspClientRequestParameters,callback:LspClientRequest, bufnr?:number): any
+---@field request fun(method:string, params:lsp.ExecuteCommandParams,callback:LspClientRequest, bufnr?:number): any
 ---@field request_sync function
 ---@field requests object
 ---@field rpc object
