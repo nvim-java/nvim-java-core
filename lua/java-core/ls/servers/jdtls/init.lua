@@ -104,6 +104,15 @@ function M.get_root_finder(root_markers)
 		if root then
 			log.debug('root of ' .. file_name .. ' is ' .. root)
 			return root
+		else
+			local fallback_dir = vim.fn.getcwd()
+			log.debug(
+				"couldn't find root of "
+					.. file_name
+					.. ' using fallback dir '
+					.. fallback_dir
+			)
+			return fallback_dir
 		end
 	end
 end
