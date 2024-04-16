@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.0](https://github.com/nvim-java/nvim-java-core/compare/v1.0.1...v1.1.0) (2024-04-16)
+
+
+### Features
+
+* feature get lombok from lombok-nightly package ([#60](https://github.com/nvim-java/nvim-java-core/issues/60)) ([0fc8f59](https://github.com/nvim-java/nvim-java-core/commit/0fc8f59160de8cd545bfb8629d97aae4a6531628))
+
+
+### Bug Fixes
+
+* trying to load jar that's not a jdtls extension ([#56](https://github.com/nvim-java/nvim-java-core/issues/56)) ([2951613](https://github.com/nvim-java/nvim-java-core/commit/295161308d57cc4c7a69daeeee6951e74080c661))
+* use fallback to cwd when root markers are missing ([#62](https://github.com/nvim-java/nvim-java-core/issues/62)) ([5644bd1](https://github.com/nvim-java/nvim-java-core/commit/5644bd19d339b3353d657e3840783e2077db99ac))
+
 ## [1.0.1](https://github.com/nvim-java/nvim-java-core/compare/v1.0.0...v1.0.1) (2023-12-15)
 
 
