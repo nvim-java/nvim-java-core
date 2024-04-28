@@ -5,7 +5,7 @@ local mason_reg = require('mason-registry')
 local path = require('java-core.utils.path')
 local plugins = require('java-core.ls.servers.jdtls.plugins')
 local util = require('lspconfig.util')
-local workspace = require('java-core.ls.servers.jdtls.workspace')
+local utils = require('java-core.ls.servers.jdtls.utils')
 
 local M = {}
 
@@ -33,8 +33,6 @@ function M.get_config(opts)
 	local equinox_launcher =
 		path.join(jdtls_root, 'plugins', 'org.eclipse.equinox.launcher.jar')
 	local plugin_paths = plugins.get_plugin_paths(opts.jdtls_plugins)
-	local jdtls_cache_path = path.join(vim.fn.stdpath('cache'), 'jdtls')
-
 	local base_config = config.get_config()
 
 	base_config.cmd = {
@@ -61,10 +59,10 @@ function M.get_config(opts)
 		equinox_launcher,
 
 		'-configuration',
-		jdtls_cache_path,
+		utils.get_jdtls_config_path(),
 
 		'-data',
-		workspace.get_default_workspace(),
+		utils.get_workspace_path(),
 	}
 
 	if opts.use_mason_jdk then
@@ -84,7 +82,7 @@ function M.get_config(opts)
 
 	base_config.root_dir = M.get_root_finder(opts.root_markers)
 	base_config.init_options.bundles = plugin_paths
-	base_config.init_options.workspace = workspace.get_default_workspace()
+	base_config.init_options.workspace = utils.get_workspace_path()
 
 	log.debug('generated jdtls setup config: ', base_config)
 
