@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/nvim-java/nvim-java-core/compare/v1.1.0...v1.1.1) (2024-04-28)
+
+
+### Bug Fixes
+
+* various compile issues due to shared common workspace between projects ([#63](https://github.com/nvim-java/nvim-java-core/issues/63)) ([ff5413f](https://github.com/nvim-java/nvim-java-core/commit/ff5413f80903d091f3dbd6f613915f59ee21123f))
+
 ## [1.1.0](https://github.com/nvim-java/nvim-java-core/compare/v1.0.1...v1.1.0) (2024-04-16)
 
 
