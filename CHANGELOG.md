@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/nvim-java/nvim-java-core/compare/v1.1.1...v1.1.2) (2024-04-30)
+
+
+### Bug Fixes
+
+* invalid data dir name generated on windows ([#66](https://github.com/nvim-java/nvim-java-core/issues/66)) ([f3e1a7f](https://github.com/nvim-java/nvim-java-core/commit/f3e1a7f43eca218bfbc28948d300057fbc0ef763))
+
 ## [1.1.1](https://github.com/nvim-java/nvim-java-core/compare/v1.1.0...v1.1.1) (2024-04-28)
 
 
