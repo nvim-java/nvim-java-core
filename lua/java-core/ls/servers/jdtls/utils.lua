@@ -7,11 +7,11 @@ local M = {}
 ---Returns the workspace directory path based on the current dir
 ---@return string
 function M.get_workspace_path()
-	local project_path =
-		string.gsub(vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h'), '/', '_')
+	local project_path = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h')
+	local project_path_hash = string.gsub(project_path, '[/\\:+-]', '_')
 
 	local nvim_cache_path = vim.fn.stdpath('cache')
-	return join(nvim_cache_path, 'jdtls', 'workspaces', project_path)
+	return join(nvim_cache_path, 'jdtls', 'workspaces', project_path_hash)
 end
 
 ---Returns the jdtls config cache directory
