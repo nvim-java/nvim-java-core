@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/nvim-java/nvim-java-core/compare/v1.1.2...v1.2.0) (2024-05-02)
+
+
+### Features
+
+* add code refactoring APIs ([#61](https://github.com/nvim-java/nvim-java-core/issues/61)) ([0d4474c](https://github.com/nvim-java/nvim-java-core/commit/0d4474c6f73ec75252b8fe1324e8abe830464de6))
+
 ## [1.1.2](https://github.com/nvim-java/nvim-java-core/compare/v1.1.1...v1.1.2) (2024-04-30)
 
 
