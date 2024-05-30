@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/nvim-java/nvim-java-core/compare/v1.2.0...v1.3.0) (2024-05-30)
+
+
+### Features
+
+* add missing capabilities from vscode-java ([#70](https://github.com/nvim-java/nvim-java-core/issues/70)) ([d8415f0](https://github.com/nvim-java/nvim-java-core/commit/d8415f0dffc250358f54129d091d8bbdbe0d5808))
+
 ## [1.2.0](https://github.com/nvim-java/nvim-java-core/compare/v1.1.2...v1.2.0) (2024-05-02)
 
 
