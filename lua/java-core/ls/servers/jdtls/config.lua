@@ -12,7 +12,7 @@ function M.get_config()
 				advancedUpgradeGradleSupport = true,
 				classFileContentsSupport = true,
 				clientDocumentSymbolProvider = true,
-				clientHoverProvider = true,
+				clientHoverProvider = false,
 				executeClientCommandSupport = true,
 				extractInterfaceSupport = true,
 				generateConstructorsPromptSupport = true,

@@ -1,9 +1,9 @@
----@class List
+---@class java-core.List
 local M = {}
 
 ---Returns a new list
 ---@param o? table
----@return List
+---@return java-core.List
 function M:new(o)
 	o = o or {}
 	setmetatable(o, self)
@@ -32,7 +32,7 @@ end
 
 ---Returns a list of mapped values
 ---@param mapper fun(value: any): any
----@return List
+---@return java-core.List
 function M:map(mapper)
 	local mapped = M:new()
 
@@ -44,7 +44,7 @@ function M:map(mapper)
 end
 
 ---Flatten a list
----@return List
+---@return java-core.List
 function M:flatten()
 	local flatten = M:new()
 
@@ -59,7 +59,7 @@ end
 
 ---Merge a given list values to current list
 ---@param list any[]
----@return List
+---@return java-core.List
 function M:concat(list)
 	local new_list = M:new()
 

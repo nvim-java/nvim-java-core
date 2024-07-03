@@ -98,6 +98,7 @@ function M.get_root_finder(root_markers)
 		log.debug('finding the root_dir with root_markers ', root_markers)
 
 		local root = util.root_pattern(unpack(root_markers))(file_name)
+		-- vim.fs.root
 
 		if root then
 			log.debug('root of ' .. file_name .. ' is ' .. root)
