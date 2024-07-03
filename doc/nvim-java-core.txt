@@ -1,10 +1,11 @@
-*nvim-java-core.txt*     For Neovim >= 0.9.4     Last change: 2023 December 15
+*nvim-java-core.txt*       For Neovim >= 0.9.4       Last change: 2024 July 03
 
 ==============================================================================
 Table of Contents                           *nvim-java-core-table-of-contents*
 
 1. nvim-java-core                              |nvim-java-core-nvim-java-core|
   - Head on to main project nvim-java|nvim-java-core-head-on-to-main-project-nvim-java|
+2. Links                                                |nvim-java-core-links|
 
 ==============================================================================
 1. nvim-java-core                              *nvim-java-core-nvim-java-core*
