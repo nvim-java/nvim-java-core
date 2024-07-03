@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/nvim-java/nvim-java-core/compare/v1.3.0...v1.3.1) (2024-07-03)
+
+
+### Bug Fixes
+
+* textDocument/hover is not supported error ([f7d883f](https://github.com/nvim-java/nvim-java-core/commit/f7d883f3a31bbd86c48cd45e402ba60dac0019cb))
+
 ## [1.3.0](https://github.com/nvim-java/nvim-java-core/compare/v1.2.0...v1.3.0) (2024-05-30)
 
 
