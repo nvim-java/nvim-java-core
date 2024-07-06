@@ -71,20 +71,12 @@ function DebugClient:start_debug_session()
 	return self:workspace_execute_command('vscode.java.startDebugSession')
 end
 
----@enum CompileWorkspaceStatus
-DebugClient.CompileWorkspaceStatus = {
-	FAILED = 0,
-	SUCCEED = 1,
-	WITHERROR = 2,
-	CANCELLED = 3,
-}
-
 ---Build the workspace
 ---@param main_class string
 ---@param project_name? string
 ---@param file_path? string
 ---@param is_full_build boolean
----@return CompileWorkspaceStatus # compiled status
+---@return java-core.CompileWorkspaceStatus # compiled status
 function DebugClient:build_workspace(
 	main_class,
 	project_name,

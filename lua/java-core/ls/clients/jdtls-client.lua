@@ -3,10 +3,11 @@ local class = require('java-core.utils.class')
 local async = require('java-core.utils.async')
 local await = async.wait_handle_error
 
----@alias jdtls.RequestMethod
+---@alias java-core.JdtlsRequestMethod
 ---| 'workspace/executeCommand'
 ---| 'java/inferSelection'
 ---| 'java/getRefactorEdit'
+---| 'java/buildWorkspace'
 
 ---@alias jdtls.CodeActionCommand
 ---| 'extractVariable'
@@ -55,7 +56,7 @@ function JdtlsClient:new(args)
 end
 
 ---Sends a LSP request
----@param method jdtls.RequestMethod
+---@param method java-core.JdtlsRequestMethod
 ---@param params lsp.ExecuteCommandParams
 ---@param buffer? number
 function JdtlsClient:request(method, params, buffer)
@@ -122,6 +123,16 @@ function JdtlsClient:java_get_refactor_edit(
 	}
 
 	return self:request('java/getRefactorEdit', params, buffer)
+end
+
+---Compile the workspace
+---@param is_full_compile boolean if true, a complete full compile of the
+---workspace will be executed
+---@param buffer number
+---@return java-core.CompileWorkspaceStatus
+function JdtlsClient:java_build_workspace(is_full_compile, buffer)
+	---@diagnostic disable-next-line: param-type-mismatch
+	return self:request('java/buildWorkspace', is_full_compile, buffer)
 end
 
 ---Returns the decompiled class file content
