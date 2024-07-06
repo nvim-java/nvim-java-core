@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.0](https://github.com/nvim-java/nvim-java-core/compare/v1.3.1...v1.4.0) (2024-07-06)
+
+
+### Features
+
+* add build workspace API ([982af13](https://github.com/nvim-java/nvim-java-core/commit/982af1386087e9921d0f38271b36bab4845d08a2))
+* spring boot support ([#73](https://github.com/nvim-java/nvim-java-core/issues/73)) ([657e1c4](https://github.com/nvim-java/nvim-java-core/commit/657e1c4e082b6891b536d311331a3d04a1826f5f))
+
 ## [1.3.1](https://github.com/nvim-java/nvim-java-core/compare/v1.3.0...v1.3.1) (2024-07-03)
 
 
