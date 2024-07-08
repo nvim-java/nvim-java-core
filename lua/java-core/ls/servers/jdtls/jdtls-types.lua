@@ -89,7 +89,7 @@ M.CompletionMatchCaseOption = {
 
 ---@class ConfigurationOptions
 ---@field maven? MavenOption
----@field runtimes? RuntimeOption
+---@field runtimes? RuntimeOption[]
 ---@field updateBuildConfiguration UpdateBuildConfigurationKind
 
 ---@class ContentProvider
