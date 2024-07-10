@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/nvim-java/nvim-java-core/compare/v1.4.0...v1.5.0) (2024-07-10)
+
+
+### Features
+
+* add API to call did change configuration notification ([#76](https://github.com/nvim-java/nvim-java-core/issues/76)) ([a0e3562](https://github.com/nvim-java/nvim-java-core/commit/a0e35624cc124ce975357a7c315c7dc8bfd7d6e4))
+
 ## [1.4.0](https://github.com/nvim-java/nvim-java-core/compare/v1.3.1...v1.4.0) (2024-07-06)
 
 
