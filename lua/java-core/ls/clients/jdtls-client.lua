@@ -22,7 +22,7 @@ local await = async.wait_handle_error
 ---| 'convertVariableToField'
 ---| 'invertVariable'
 ---| 'introduceParameter'
----| 'convertAnonymousClassToNestedCommand') {
+---| 'convertAnonymousClassToNestedCommand'
 
 ---@class jdtls.RefactorWorkspaceEdit
 ---@field edit lsp.WorkspaceEdit
@@ -88,7 +88,7 @@ function JdtlsClient:workspace_execute_command(command, params, buffer)
 end
 
 ---Returns more information about the object the cursor is on
----@param command java-core.JdtlsRequestMethod
+---@param command jdtls.CodeActionCommand
 ---@param params lsp.CodeActionParams
 ---@param buffer? number
 ---@return jdtls.SelectionInfo[]
