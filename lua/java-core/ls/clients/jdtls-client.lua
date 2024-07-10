@@ -43,18 +43,6 @@ function JdtlsClient:_init(client)
 	self.client = client
 end
 
----@param args? { client: LspClient }
----@return java-core.JdtlsClient
-function JdtlsClient:new(args)
-	local o = {
-		client = (args or {}).client,
-	}
-
-	setmetatable(o, self)
-	self.__index = self
-	return o
-end
-
 ---Sends a LSP request
 ---@param method java-core.JdtlsRequestMethod
 ---@param params lsp.ExecuteCommandParams
@@ -77,6 +65,16 @@ function JdtlsClient:request(method, params, buffer)
 	end)
 end
 
+---Sends a notification to LSP
+---Returns true if the notification sent successfully
+---@param method string
+---@param params table
+---@return boolean
+function JdtlsClient:notify(method, params)
+	log.debug('sending LSP notify: ' .. method)
+	return self.client.notify(method, params)
+end
+
 ---Executes a workspace/executeCommand and returns the result
 ---@param command string workspace command to execute
 ---@param params? lsp.LSPAny[]
@@ -90,7 +88,7 @@ function JdtlsClient:workspace_execute_command(command, params, buffer)
 end
 
 ---Returns more information about the object the cursor is on
----@param command jdtls.RequestMethod
+---@param command java-core.JdtlsRequestMethod
 ---@param params lsp.CodeActionParams
 ---@param buffer? number
 ---@return jdtls.SelectionInfo[]
@@ -156,6 +154,14 @@ function JdtlsClient:get_capability(...)
 	end
 
 	return capability
+end
+
+---comment
+---@param settings JavaConfigurationSettings
+---@return boolean
+function JdtlsClient:workspace_did_change_configuration(settings)
+	local params = { settings = settings }
+	return self:notify('workspace/didChangeConfiguration', params)
 end
 
 ---Returns true if the LS supports the given command
