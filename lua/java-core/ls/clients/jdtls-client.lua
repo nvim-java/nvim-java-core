@@ -89,19 +89,19 @@ end
 
 ---Returns more information about the object the cursor is on
 ---@param command jdtls.CodeActionCommand
----@param params lsp.CodeActionParams
+---@param context lsp.CodeActionContext
 ---@param buffer? number
 ---@return jdtls.SelectionInfo[]
-function JdtlsClient:java_infer_selection(command, params, buffer)
+function JdtlsClient:java_infer_selection(command, context, buffer)
 	return self:request('java/inferSelection', {
 		command = command,
-		context = params,
+		context = context,
 	}, buffer)
 end
 
 ---Returns refactor details
 ---@param command jdtls.CodeActionCommand
----@param context lsp.CodeActionParams
+---@param context lsp.CodeActionContext
 ---@param options lsp.FormattingOptions
 ---@param command_arguments jdtls.SelectionInfo[];
 ---@param buffer? number
