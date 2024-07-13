@@ -89,35 +89,35 @@ end
 
 ---Returns more information about the object the cursor is on
 ---@param command jdtls.CodeActionCommand
----@param context lsp.CodeActionContext
+---@param params lsp.CodeActionParams
 ---@param buffer? number
 ---@return jdtls.SelectionInfo[]
-function JdtlsClient:java_infer_selection(command, context, buffer)
+function JdtlsClient:java_infer_selection(command, params, buffer)
 	return self:request('java/inferSelection', {
 		command = command,
-		context = context,
+		context = params,
 	}, buffer)
 end
 
 ---Returns refactor details
 ---@param command jdtls.CodeActionCommand
----@param context lsp.CodeActionContext
----@param options lsp.FormattingOptions
----@param command_arguments jdtls.SelectionInfo[];
+---@param action_params lsp.CodeActionParams
+---@param formatting_options lsp.FormattingOptions
+---@param selection_info jdtls.SelectionInfo[];
 ---@param buffer? number
 ---@return jdtls.RefactorWorkspaceEdit
 function JdtlsClient:java_get_refactor_edit(
 	command,
-	context,
-	options,
-	command_arguments,
+	action_params,
+	formatting_options,
+	selection_info,
 	buffer
 )
 	local params = {
 		command = command,
-		context = context,
-		options = options,
-		commandArguments = command_arguments,
+		context = action_params,
+		options = formatting_options,
+		commandArguments = selection_info,
 	}
 
 	return self:request('java/getRefactorEdit', params, buffer)
