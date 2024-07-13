@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/nvim-java/nvim-java-core/compare/v1.5.0...v1.6.0) (2024-07-13)
+
+
+### Features
+
+* add constructor requests ([0305c97](https://github.com/nvim-java/nvim-java-core/commit/0305c972167fd1bdc2ffa43bfcc2d319732b1dd0))
+
 ## [1.5.0](https://github.com/nvim-java/nvim-java-core/compare/v1.4.0...v1.5.0) (2024-07-10)
 
 
