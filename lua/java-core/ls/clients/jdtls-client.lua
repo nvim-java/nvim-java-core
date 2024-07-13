@@ -8,6 +8,8 @@ local await = async.wait_handle_error
 ---| 'java/inferSelection'
 ---| 'java/getRefactorEdit'
 ---| 'java/buildWorkspace'
+---| 'java/checkConstructorsStatus'
+---| 'java/generateConstructors'
 
 ---@alias jdtls.CodeActionCommand
 ---| 'extractVariable'
@@ -45,7 +47,7 @@ end
 
 ---Sends a LSP request
 ---@param method java-core.JdtlsRequestMethod
----@param params lsp.ExecuteCommandParams
+---@param params lsp.LSPAny
 ---@param buffer? number
 function JdtlsClient:request(method, params, buffer)
 	log.debug('sending LSP request: ' .. method)
@@ -97,6 +99,39 @@ function JdtlsClient:java_infer_selection(command, params, buffer)
 		command = command,
 		context = params,
 	}, buffer)
+end
+
+--- @class jdtls.VariableBinding
+--- @field bindingKey string
+--- @field name string
+--- @field type string
+--- @field isField boolean
+--- @field isSelected? boolean
+
+---@class jdtls.MethodBinding
+---@field bindingKey string;
+---@field name string;
+---@field parameters string[];
+
+---@class jdtls.JavaCheckConstructorsStatusResponse
+---@field constructors jdtls.MethodBinding
+---@field fields jdtls.MethodBinding
+
+---@param params lsp.CodeActionParams
+---@return jdtls.JavaCheckConstructorsStatusResponse
+function JdtlsClient:java_check_constructors_status(params)
+	return self:request('java/checkConstructorsStatus', params)
+end
+
+---@class jdtls.GenerateConstructorsParams
+---@field context lsp.CodeActionParams
+---@field constructors jdtls.MethodBinding[]
+---@field fields jdtls.VariableBinding[]
+
+---@param params jdtls.GenerateConstructorsParams
+---@return lsp.WorkspaceEdit
+function JdtlsClient:java_generate_constructor(params)
+	return self:request('java/generateConstructors', params)
 end
 
 ---Returns refactor details

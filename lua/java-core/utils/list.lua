@@ -31,13 +31,13 @@ function M:find(finder)
 end
 
 ---Returns a list of mapped values
----@param mapper fun(value: any): any
+---@param mapper fun(value: any, index: number): any
 ---@return java-core.List
 function M:map(mapper)
 	local mapped = M:new()
 
-	for _, v in ipairs(self) do
-		mapped:push(mapper(v))
+	for i, v in ipairs(self) do
+		mapped:push(mapper(v, i))
 	end
 
 	return mapped
@@ -110,6 +110,21 @@ function M:every(validator)
 	end
 
 	return true
+end
+
+---Returns a filtered list
+---@param filter fun(value: any, index: integer): boolean
+---@return java-core.List
+function M:filter(filter)
+	local new_list = M:new()
+
+	self:for_each(function(value, index)
+		if filter(value, index) then
+			new_list:push(value)
+		end
+	end)
+
+	return new_list
 end
 
 return M

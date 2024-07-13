@@ -18,7 +18,7 @@ local M = {}
 
 ---Returns a configuration for jdtls that you can pass into the setup of nvim-lspconfig
 ---@param opts JavaCoreGetConfigOptions
----@return LspSetupConfig # jdtls setup configuration
+---@return vim.lsp.ClientConfig
 function M.get_config(opts)
 	log.debug('generating jdtls config')
 
@@ -80,6 +80,7 @@ function M.get_config(opts)
 		end
 	end
 
+	---@diagnostic disable-next-line: assign-type-mismatch
 	base_config.root_dir = M.get_root_finder(opts.root_markers)
 	base_config.init_options.bundles = plugin_paths
 	base_config.init_options.workspace = utils.get_workspace_path()
@@ -92,7 +93,7 @@ end
 ---Returns a function that finds the java project root
 ---@private
 ---@param root_markers string[] list of files to find the root dir of a project
----@return fun(file_name: string): string | nil
+---@return fun(file_name: string): string
 function M.get_root_finder(root_markers)
 	return function(file_name)
 		log.debug('finding the root_dir with root_markers ', root_markers)

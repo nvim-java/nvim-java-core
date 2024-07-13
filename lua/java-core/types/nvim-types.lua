@@ -1,7 +1,6 @@
----@class nvim.Range
----@field end nvim.CursorPoint
----@field start nvim.CursorPoint
-
----@class nvim.CursorPoint
----@field line integer
----@field character integer
+---@class nvim.CodeActionParamsResponse
+---@field bufnr number
+---@field client_id number
+---@field method string
+---@field params lsp.CodeActionParams
+---@field version number
