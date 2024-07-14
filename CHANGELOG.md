@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/nvim-java/nvim-java-core/compare/v1.6.0...v1.7.0) (2024-07-14)
+
+
+### Features
+
+* adding APIs for toString and hash code generation ([c74d23e](https://github.com/nvim-java/nvim-java-core/commit/c74d23ed32104aace503d6819e74dd41bf0e2deb))
+
 ## [1.6.0](https://github.com/nvim-java/nvim-java-core/compare/v1.5.0...v1.6.0) (2024-07-13)
 
 
