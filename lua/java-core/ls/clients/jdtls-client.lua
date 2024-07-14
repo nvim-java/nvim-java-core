@@ -10,6 +10,10 @@ local await = async.wait_handle_error
 ---| 'java/buildWorkspace'
 ---| 'java/checkConstructorsStatus'
 ---| 'java/generateConstructors'
+---| 'java/checkToStringStatus'
+---| 'java/generateToString'
+---| 'java/checkHashCodeEqualsStatus'
+---| 'java/generateHashCodeEquals'
 
 ---@alias jdtls.CodeActionCommand
 ---| 'extractVariable'
@@ -123,16 +127,59 @@ function JdtlsClient:java_check_constructors_status(params)
 	return self:request('java/checkConstructorsStatus', params)
 end
 
----@class jdtls.GenerateConstructorsParams
----@field context lsp.CodeActionParams
----@field constructors jdtls.MethodBinding[]
----@field fields jdtls.VariableBinding[]
-
 ---@param params jdtls.GenerateConstructorsParams
 ---@return lsp.WorkspaceEdit
 function JdtlsClient:java_generate_constructor(params)
 	return self:request('java/generateConstructors', params)
 end
+
+---@class jdtls.CheckToStringResponse
+---@field type string
+---@field fields jdtls.VariableBinding[]
+---@field exists boolean
+
+---@param params lsp.CodeActionParams
+---@return jdtls.CheckToStringResponse
+function JdtlsClient:java_check_to_string_status(params)
+	return self:request('java/checkToStringStatus', params)
+end
+
+---@class jdtls.GenerateToStringParams
+---@field context lsp.CodeActionParams
+---@field fields jdtls.VariableBinding[]
+
+---@param params jdtls.GenerateToStringParams
+---@return lsp.WorkspaceEdit
+function JdtlsClient:java_generate_to_string(params)
+	return self:request('java/generateToString', params)
+end
+
+---@class jdtls.CheckHashCodeEqualsResponse
+---@field type string
+---@field fields jdtls.VariableBinding[]
+---@field existingMethods string[]
+
+---@param params lsp.CodeActionParams
+---@return jdtls.CheckHashCodeEqualsResponse
+function JdtlsClient:java_check_hash_code_equals_status(params)
+	return self:request('java/checkHashCodeEqualsStatus', params)
+end
+
+---@class jdtls.GenerateHashCodeEqualsParams
+---@field context lsp.CodeActionParams
+---@field fields jdtls.VariableBinding[]
+---@field regenerate boolean
+
+---@param params jdtls.GenerateHashCodeEqualsParams
+---@return lsp.WorkspaceEdit
+function JdtlsClient:java_generate_hash_code_equals(params)
+	return self:request('java/generateHashCodeEquals', params)
+end
+
+---@class jdtls.GenerateConstructorsParams
+---@field context lsp.CodeActionParams
+---@field constructors jdtls.MethodBinding[]
+---@field fields jdtls.VariableBinding[]
 
 ---Returns refactor details
 ---@param command jdtls.CodeActionCommand
