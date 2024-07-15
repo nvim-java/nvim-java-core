@@ -14,6 +14,8 @@ local await = async.wait_handle_error
 ---| 'java/generateToString'
 ---| 'java/checkHashCodeEqualsStatus'
 ---| 'java/generateHashCodeEquals'
+---| 'java/checkDelegateMethodsStatus'
+---| 'java/generateDelegateMethods'
 
 ---@alias jdtls.CodeActionCommand
 ---| 'extractVariable'
@@ -174,6 +176,33 @@ end
 ---@return lsp.WorkspaceEdit
 function JdtlsClient:java_generate_hash_code_equals(params)
 	return self:request('java/generateHashCodeEquals', params)
+end
+
+---@class jdtls.DelegateField
+---@field field jdtls.VariableBinding
+---@field delegateMethods jdtls.MethodBinding[]
+
+---@class jdtls.CheckDelegateMethodsResponse
+---@field delegateFields jdtls.DelegateField[]
+
+---@param params lsp.CodeActionParams
+---@return jdtls.CheckDelegateMethodsResponse
+function JdtlsClient:java_check_delegate_methods_status(params)
+	return self:request('java/checkDelegateMethodsStatus', params)
+end
+
+---@class jdtls.DelegateEntry
+---@field field jdtls.VariableBinding
+---@field delegateMethod jdtls.MethodBinding
+
+---@class jdtls.GenerateDelegateMethodsParams
+---@field context lsp.CodeActionParams
+---@field delegateEntries jdtls.DelegateEntry[]
+
+---@param params jdtls.GenerateDelegateMethodsParams
+---@return lsp.WorkspaceEdit
+function JdtlsClient:java_generate_delegate_methods(params)
+	return self:request('java/generateDelegateMethods', params)
 end
 
 ---@class jdtls.GenerateConstructorsParams
