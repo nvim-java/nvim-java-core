@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/nvim-java/nvim-java-core/compare/v1.7.0...v1.8.0) (2024-07-15)
+
+
+### Features
+
+* adding APIs for delegate method code action ([6882430](https://github.com/nvim-java/nvim-java-core/commit/68824309e15dfa99ab0548c7118c77a0ccf31f35))
+
 ## [1.7.0](https://github.com/nvim-java/nvim-java-core/compare/v1.6.0...v1.7.0) (2024-07-14)
 
 
