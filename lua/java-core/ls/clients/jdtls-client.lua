@@ -16,6 +16,9 @@ local await = async.wait_handle_error
 ---| 'java/generateHashCodeEquals'
 ---| 'java/checkDelegateMethodsStatus'
 ---| 'java/generateDelegateMethods'
+---| 'java/move'
+---| 'java/searchSymbols'
+---| 'java/getMoveDestinations'
 
 ---@alias jdtls.CodeActionCommand
 ---| 'extractVariable'
@@ -93,6 +96,55 @@ function JdtlsClient:workspace_execute_command(command, params, buffer)
 		command = command,
 		arguments = params,
 	}, buffer)
+end
+
+---@class jdtls.ResourceMoveDestination
+---@field displayName string
+---@field isDefaultPackage boolean
+---@field isParentOfSelectedFile boolean
+---@field path string
+---@field project string
+---@field uri string
+
+---@class jdtls.InstanceMethodMoveDestination
+---@field bindingKey string
+---@field isField boolean
+---@field isSelected boolean
+---@field name string
+---@field type string
+
+---@class jdtls.MoveDestinationsResponse
+---@field errorMessage? string
+---@field destinations  jdtls.InstanceMethodMoveDestination[]|jdtls.ResourceMoveDestination[]
+
+---@param params jdtls.MoveParams
+---@return jdtls.MoveDestinationsResponse
+function JdtlsClient:get_move_destination(params)
+	return self:request('java/getMoveDestinations', params)
+end
+
+---@class jdtls.MoveParams
+---@field moveKind string
+---@field sourceUris string[]
+---@field params lsp.CodeActionParams | nil
+---@field destination? any
+---@field updateReferences? boolean
+
+---@param params jdtls.MoveParams
+---@return jdtls.RefactorWorkspaceEdit
+function JdtlsClient:java_move(params)
+	return self:request('java/move', params)
+end
+
+---@class jdtls.SearchSymbolParams: lsp.WorkspaceSymbolParams
+---@field projectName string
+---@field maxResults? number
+---@field sourceOnly? boolean
+
+---@param params jdtls.SearchSymbolParams
+---@return lsp.SymbolInformation
+function JdtlsClient:java_search_symbols(params)
+	return self:request('java/searchSymbols', params)
 end
 
 ---Returns more information about the object the cursor is on
