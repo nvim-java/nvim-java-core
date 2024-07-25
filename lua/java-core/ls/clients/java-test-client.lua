@@ -14,25 +14,17 @@ local JdtlsClient = require('java-core.ls.clients.jdtls-client')
 ---@field uri string
 
 ---@class java-core.TestDetailsWithRange: java-core.TestDetails
----@field range java-core.TestRange
+---@field range lsp.Range
 
 ---@class java-core.TestDetailsWithChildren: java-core.TestDetails
 ---@field children java-core.TestDetailsWithRange[]
 
 ---@class java-core.TestDetailsWithChildrenAndRange: java-core.TestDetails
----@field range java-core.TestRange
+---@field range lsp.Range
 ---@field children java-core.TestDetailsWithRange[]
-
----@class java-core.TestRange
----@field start nvim.CursorPoint
----@field end nvim.CursorPoint
 
 ---@class java-core.TestClient: java-core.JdtlsClient
 local TestClient = class(JdtlsClient)
-
-function TestClient:_init(client)
-	self:super(client)
-end
 
 ---Returns a list of project details in the current root
 ---@return java-core.TestDetails[] # test details of the projects
@@ -89,7 +81,7 @@ function TestClient:resolve_junit_launch_arguments(args)
 		vim.fn.json_encode(args)
 	)
 
-	if not launch_args.body then
+	if not launch_args or not launch_args.body then
 		local msg = 'Failed to retrive JUnit launch arguments'
 
 		log.error(msg, launch_args)

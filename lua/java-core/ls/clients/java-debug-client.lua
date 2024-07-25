@@ -5,17 +5,13 @@ local JdtlsClient = require('java-core.ls.clients.jdtls-client')
 ---@class java-core.DebugClient: java-core.JdtlsClient
 local DebugClient = class(JdtlsClient)
 
-function DebugClient:_init(client)
-	self:super(client)
-end
-
----@class JavaDebugResolveMainClassRecord
+---@class java-dap.JavaDebugResolveMainClassRecord
 ---@field mainClass string
 ---@field projectName string
 ---@field fileName string
 
 ---Returns a list of main classes in the current workspace
----@return JavaDebugResolveMainClassRecord[] # resolved main class
+---@return java-dap.JavaDebugResolveMainClassRecord[] # resolved main class
 function DebugClient:resolve_main_class()
 	return self:workspace_execute_command('vscode.java.resolveMainClass')
 end

@@ -72,6 +72,7 @@ function JdtlsClient:request(method, params, buffer)
 			callback(err, result)
 		end
 
+		---@diagnostic disable-next-line: param-type-mismatch
 		return self.client.request(method, params, on_response, buffer)
 	end)
 end
