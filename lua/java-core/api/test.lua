@@ -53,6 +53,12 @@ end
 ---@param config? java-dap.DapLauncherConfigOverridable config to override the default values in test launcher config
 function M:run_class_by_buffer(buffer, report, config)
 	local tests = self:get_test_class_by_buffer(buffer)
+
+	if #tests < 1 then
+		vim.notify('No tests found in the current buffer')
+		return
+	end
+
 	self:run_test(tests, report, config)
 end
 
