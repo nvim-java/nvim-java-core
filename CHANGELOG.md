@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.9.0](https://github.com/nvim-java/nvim-java-core/compare/v1.8.0...v1.9.0) (2024-12-25)
+
+
+### Features
+
+* add helper functions ([1ce1143](https://github.com/nvim-java/nvim-java-core/commit/1ce1143c595c5f6357bede19e9bf4000bf7f980c))
+* add refactoring APIs ([5def9bd](https://github.com/nvim-java/nvim-java-core/commit/5def9bd1a0ddd624fbc2c2028fd7a493e4d75021))
+
 ## [1.8.0](https://github.com/nvim-java/nvim-java-core/compare/v1.7.0...v1.8.0) (2024-07-15)
 
 
