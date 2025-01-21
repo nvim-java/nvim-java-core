@@ -19,6 +19,8 @@ local await = async.wait_handle_error
 ---| 'java/move'
 ---| 'java/searchSymbols'
 ---| 'java/getMoveDestinations'
+---| 'java/listOverridableMethods'
+---| 'java/addOverridableMethods'
 
 ---@alias jdtls.CodeActionCommand
 ---| 'extractVariable'
@@ -113,6 +115,19 @@ end
 ---@field isSelected boolean
 ---@field name string
 ---@field type string
+
+---@class jdtls.listOverridableMethodsResponse
+---@field methods jdtls.OverridableMethod[]
+---@field type string
+
+---@class jdtls.OverridableMethod
+---@field key string
+---@field bindingKey string
+---@field declaringClass string
+---@field declaringClassType string
+---@field name string
+---@field parameters string[]
+---@field unimplemented boolean
 
 ---@class jdtls.MoveDestinationsResponse
 ---@field errorMessage? string
@@ -285,6 +300,30 @@ function JdtlsClient:java_get_refactor_edit(
 	}
 
 	return self:request('java/getRefactorEdit', params, buffer)
+end
+
+---Returns a list of methods that can be overridden
+---@param params lsp.CodeActionParams
+---@param buffer? number
+---@return jdtls.listOverridableMethodsResponse
+function JdtlsClient:list_overridable_methods(params, buffer)
+	return self:request('java/listOverridableMethods', params, buffer)
+end
+
+---Returns a list of methods that can be overridden
+---@param context lsp.CodeActionParams
+---@param overridable_methods jdtls.OverridableMethod[]
+---@param buffer? number
+---@return lsp.WorkspaceEdit
+function JdtlsClient:add_overridable_methods(
+	context,
+	overridable_methods,
+	buffer
+)
+	return self:request('java/addOverridableMethods', {
+		context = context,
+		overridableMethods = overridable_methods,
+	}, buffer)
 end
 
 ---Compile the workspace
