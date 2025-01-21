@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/nvim-java/nvim-java-core/compare/v1.9.0...v1.10.0) (2025-01-21)
+
+
+### Features
+
+* add listOverridableMethods and addOverridableMethods commands ([#83](https://github.com/nvim-java/nvim-java-core/issues/83)) ([3debe6c](https://github.com/nvim-java/nvim-java-core/commit/3debe6c6bc03b4e3c2831d2904c16453cc55664a))
+
 ## [1.9.0](https://github.com/nvim-java/nvim-java-core/compare/v1.8.0...v1.9.0) (2024-12-25)
 
 
