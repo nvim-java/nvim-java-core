@@ -133,6 +133,14 @@ end
 ---@field errorMessage? string
 ---@field destinations  jdtls.InstanceMethodMoveDestination[]|jdtls.ResourceMoveDestination[]
 
+---@class jdtls.ImportCandidate
+---@field fullyQualifiedName string
+---@field id string
+
+---@class jdtls.ImportSelection
+---@field candidates jdtls.ImportCandidate[]
+---@field range Range
+
 ---@param params jdtls.MoveParams
 ---@return jdtls.MoveDestinationsResponse
 function JdtlsClient:get_move_destination(params)
