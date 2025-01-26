@@ -1,5 +1,6 @@
 local log = require('java-core.utils.log')
 local data_adapters = require('java-core.adapters')
+local notify = require('java-core.utils.notify')
 
 local DebugClient = require('java-core.ls.clients.java-debug-client')
 local TestClient = require('java-core.ls.clients.java-test-client')
@@ -55,7 +56,7 @@ function M:run_class_by_buffer(buffer, report, config)
 	local tests = self:get_test_class_by_buffer(buffer)
 
 	if #tests < 1 then
-		vim.notify('No tests found in the current buffer')
+		notify.warn('No tests found in the current buffer')
 		return
 	end
 
