@@ -31,7 +31,7 @@ function M.get_config(opts)
 	local jdtls_config = path.join(jdtls_root, 'config')
 	local lombok_path = path.join(lombok_root, 'lombok.jar')
 	local equinox_launcher =
-		path.join(jdtls_root, 'plugins', 'org.eclipse.equinox.launcher.jar')
+			path.join(jdtls_root, 'plugins', 'org.eclipse.equinox.launcher.jar')
 	local plugin_paths = plugins.get_plugin_paths(opts.jdtls_plugins)
 	local base_config = config.get_config()
 
@@ -69,8 +69,9 @@ function M.get_config(opts)
 		local jdk = mason_reg.get_package('openjdk-17')
 
 		if jdk:is_installed() then
-			local java_home =
-				vim.fn.glob(path.join(jdk:get_install_path(), '/jdk-17*'))
+			local java_home = vim.fn.glob(
+				vim.fn.stdpath('data') .. '/mason/packages/openjdk-17/jdk-17*'
+			)
 			local java_bin = path.join(java_home, '/bin')
 
 			base_config.cmd_env = {
@@ -108,9 +109,9 @@ function M.get_root_finder(root_markers)
 			local fallback_dir = vim.fn.getcwd()
 			log.debug(
 				"couldn't find root of "
-					.. file_name
-					.. ' using fallback dir '
-					.. fallback_dir
+				.. file_name
+				.. ' using fallback dir '
+				.. fallback_dir
 			)
 			return fallback_dir
 		end

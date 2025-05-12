@@ -6,21 +6,25 @@ local M = {}
 ---@param pkg_name string
 ---@return string | nil
 function M.get_pkg_path(pkg_name)
-	return mason_registry.get_package(pkg_name):get_install_path()
+  local mason_data_path = vim.fn.stdpath("data") .. "/mason/packages/" .. pkg_name
+  return mason_data_path
 end
 
----Returns true if the package in installed in mason
+---Returns true if the package is installed in mason
 ---@param pkg_name string
 ---@return boolean
 function M.is_pkg_installed(pkg_name)
-	return mason_registry.get_package(pkg_name):is_installed()
+  local ok, pkg = pcall(mason_registry.get_package, pkg_name)
+  return ok and pkg:is_installed()
 end
 
 ---Returns the shared artifact path for a given package
----@param pkg_name string name of the package to get the path of
----@return string # path to the shared artifact directory of the package
+---@param pkg_name string
+---@return string
 function M.get_shared_path(pkg_name)
-	return vim.fn.glob('$MASON/share/' .. pkg_name)
+  local mason_share_path = vim.fn.stdpath("data") .. "/mason/share/" .. pkg_name
+  return mason_share_path
 end
 
 return M
+
