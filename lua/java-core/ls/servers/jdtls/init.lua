@@ -69,8 +69,9 @@ function M.get_config(opts)
 		local jdk = mason_reg.get_package('openjdk-17')
 
 		if jdk:is_installed() then
-			local java_home =
-					vim.fn.glob(vim.fn.expand('$MASON/packages/openjdk-17/jdk-17*'))
+			local java_home = vim.fn.glob(
+				vim.fn.stdpath('data') .. '/mason/packages/openjdk-17/jdk-17*'
+			)
 			local java_bin = path.join(java_home, '/bin')
 
 			base_config.cmd_env = {
