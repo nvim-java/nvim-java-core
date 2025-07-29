@@ -26,10 +26,9 @@ function M.get_config(opts)
 	-- pick the OS at runtime because mason.nvim does that for me at the
 	-- installation
 	local jdtls_root = mason.get_shared_path('jdtls')
-	local lombok_root = mason.get_shared_path('lombok-nightly')
 
 	local jdtls_config = path.join(jdtls_root, 'config')
-	local lombok_path = path.join(lombok_root, 'lombok.jar')
+	local lombok_path = path.join(jdtls_root, 'lombok.jar')
 	local equinox_launcher =
 		path.join(jdtls_root, 'plugins', 'org.eclipse.equinox.launcher.jar')
 	local plugin_paths = plugins.get_plugin_paths(opts.jdtls_plugins)
@@ -64,21 +63,6 @@ function M.get_config(opts)
 		'-data',
 		utils.get_workspace_path(),
 	}
-
-	if opts.use_mason_jdk then
-		local jdk = mason_reg.get_package('openjdk-17')
-
-		if jdk:is_installed() then
-			local java_home =
-				vim.fn.glob('$MASON/packages/jdk-17*')
-			local java_bin = path.join(java_home, '/bin')
-
-			base_config.cmd_env = {
-				['PATH'] = vim.fn.getenv('PATH') .. ':' .. java_bin,
-				['JAVA_HOME'] = java_home,
-			}
-		end
-	end
 
 	---@diagnostic disable-next-line: assign-type-mismatch
 	base_config.root_dir = M.get_root_finder(opts.root_markers)
