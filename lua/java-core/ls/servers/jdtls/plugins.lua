@@ -26,7 +26,7 @@ local plug_jar_map = {
 		'com.microsoft.java.test.plugin-*.jar',
 	},
 	['java-debug-adapter'] = { '*.jar' },
-	['spring-boot-tools'] = { 'jars/*.jar' },
+	['vs-code-spring-boot-tools'] = { 'jars/*.jar' },
 }
 
 ---Returns a list of .jar file paths for given list of jdtls plugins
