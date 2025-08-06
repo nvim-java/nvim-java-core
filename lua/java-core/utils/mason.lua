@@ -6,14 +6,19 @@ local M = {}
 ---@param pkg_name string
 ---@return string | nil
 function M.get_pkg_path(pkg_name)
-	return mason_registry.get_package(pkg_name):get_install_path()
+	local found, pkg = pcall(mason_registry.get_package, pkg_name)
+	if not found or not pkg:is_installed() then
+		return nil
+	end
+	return vim.fn.expand('$MASON/packages/' .. pkg_name)
 end
 
----Returns true if the package in installed in mason
+---Returns true if the package is installed in mason
 ---@param pkg_name string
 ---@return boolean
 function M.is_pkg_installed(pkg_name)
-	return mason_registry.get_package(pkg_name):is_installed()
+	local found, pkg = pcall(mason_registry.get_package, pkg_name)
+	return found and pkg:is_installed()
 end
 
 ---Returns the shared artifact path for a given package
