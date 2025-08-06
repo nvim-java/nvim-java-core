@@ -5,7 +5,7 @@
 
 ### Features
 
-* adds Mason 2.0 support ([#93](https://github.com/nvim-java/nvim-java-core/issues/93)) ([0fd98aa](https://github.com/nvim-java/nvim-java-core/commit/0fd98aa0337b2381118f670ac24d52fa86748de2))
+* [@logrusx](https://github.com/logrusx) adds Mason 2.0 support ([#93](https://github.com/nvim-java/nvim-java-core/issues/93)) ([0fd98aa](https://github.com/nvim-java/nvim-java-core/commit/0fd98aa0337b2381118f670ac24d52fa86748de2))
 
 
 ### Miscellaneous Chores
