@@ -10,7 +10,7 @@ function M.get_pkg_path(pkg_name)
 	if not found or not pkg:is_installed() then
 		return nil
 	end
-	return vim.fn.expand("$MASON/packages/" .. pkg_name)
+	return vim.fn.expand('$MASON/packages/' .. pkg_name)
 end
 
 ---Returns true if the package is installed in mason
