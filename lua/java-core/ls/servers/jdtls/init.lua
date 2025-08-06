@@ -1,7 +1,6 @@
 local config = require('java-core.ls.servers.jdtls.config')
 local log = require('java-core.utils.log')
 local mason = require('java-core.utils.mason')
-local mason_reg = require('mason-registry')
 local path = require('java-core.utils.path')
 local plugins = require('java-core.ls.servers.jdtls.plugins')
 local util = require('lspconfig.util')
