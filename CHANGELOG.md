@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.0.0](https://github.com/nvim-java/nvim-java-core/compare/v1.10.0...v2.0.0) (2025-08-06)
+
+
+### Features
+
+* adds Mason 2.0 support ([#93](https://github.com/nvim-java/nvim-java-core/issues/93)) ([0fd98aa](https://github.com/nvim-java/nvim-java-core/commit/0fd98aa0337b2381118f670ac24d52fa86748de2))
+
+
+### Miscellaneous Chores
+
+* release 2.0.0 ([667fab0](https://github.com/nvim-java/nvim-java-core/commit/667fab0f7c67329d9f4a29e8a25759d965e9a91a))
+
 ## [1.10.0](https://github.com/nvim-java/nvim-java-core/compare/v1.9.0...v1.10.0) (2025-01-21)
 
 
